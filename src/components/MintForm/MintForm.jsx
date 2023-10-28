@@ -37,13 +37,44 @@ const MintForm = () => {
         setFormData(initialValues);
     };
 
+    const handleDragEnter = (e) => {
+        e.preventDefault();
+        setIsHovered(true);
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'copy';
+        setIsHovered(true);
+    };
+
+    const handleDragLeave = () => {
+        setIsHovered(false);
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        setIsHovered(false);
+
+        const file = e.dataTransfer.files[0];
+
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            setSelectedImage(imageUrl);
+        }
+    };
+
     const imgBorder = selectedImage
         ? ''
         : 'border border-dashed hover:border-solid';
 
     return (
-        <div className='m-auto w-full pt-[136px] h-full'>
-            <div className='w-full flex gap-36 justify-center '>
+        <div
+            className={`${classes.responsive1} m-auto w-full pt-[136px] h-full mb-10`}
+        >
+            <div
+                className={` ${classes.headingDiv} w-full gap-36 justify-center`}
+            >
                 <div className='flex flex-col h-full w-full gap-2 md:max-w-[600px] '>
                     <span className='font-semibold text-3xl'>
                         Create an NFT
@@ -53,11 +84,13 @@ const MintForm = () => {
                         any of its information.
                     </span>
                 </div>
-                <div className='flex flex-col h-full w-full gap-2 md:max-w-[600px]'></div>
+                <div
+                    className={`${classes.hideDiv} flex flex-col h-full w-full gap-2 md:max-w-[600px]`}
+                ></div>
             </div>
             <form
                 onSubmit={handleSubmit}
-                className='w-full h-full flex gap-36 justify-center relative pt-8'
+                className={`${classes.responsive1} w-full h-full md:flex gap-36 justify-center relative pt-8`}
             >
                 {/* left side form - drag and drop file upload */}
                 <div className='w-full h-full md:max-w-[600px]'>
@@ -65,6 +98,10 @@ const MintForm = () => {
                         className={`relative ${imgBorder} border-slate-500 rounded-lg flex flex-col items-center justify-center cursor-pointer aspect-square `}
                         onMouseEnter={() => setIsHovered(true)}
                         onMouseLeave={() => setIsHovered(false)}
+                        onDragEnter={handleDragEnter}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDrop}
                     >
                         {selectedImage && isHovered && (
                             <div className={classes.overlay}></div>
@@ -117,8 +154,12 @@ const MintForm = () => {
                                     <span className='text-gray-600'>
                                         Drag and drop media
                                     </span>
-                                    <span className='text-indigo-600'>
-                                        Browse
+                                    <span className='text-gray-600'>
+                                        Or
+                                        <span className='text-indigo-600 mx-1'>
+                                            Browse
+                                        </span>
+                                        your files.
                                     </span>
                                 </>
                             )}
@@ -207,7 +248,9 @@ const MintForm = () => {
                             </option>
                         </select>
                     </div>
-                    <button className='text-center text-white text-xl font-bold bg-blue-500 px-12 py-3 rounded-lg self-end'>
+                    <button
+                        className={`${classes.respnsiveBtn} text-center text-white text-xl font-bold bg-blue-500 px-12 py-3 rounded-lg self-end`}
+                    >
                         Create
                     </button>
                 </div>
