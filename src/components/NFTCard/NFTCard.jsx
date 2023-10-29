@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
-import nftImg from '../../../public/nftImage.jpg';
+import { useState } from 'react';
 
-const NFTCard = () => {
+const NFTCard = ({
+    cardImg,
+    cardName,
+    cardPrice,
+    lastSoldPrice
+}) => {
     const [isHovered, setIsHovered] = useState(false);
+
+    const priceFormat = (price) => {
+        return `${price.toFixed(2)} ETH`
+    } 
 
     return (
         <div className="flex mt-24">
-            <div className="w-1/5 h-full">
-                <p>aside</p>
-            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 w-3/4">
                 <div
                     className="shadow-xl rounded-lg overflow-hidden cursor-pointer "
@@ -21,17 +26,17 @@ const NFTCard = () => {
                                 className={`w-full h-full object-cover transition-all duration-500 ${
                                     isHovered ? 'scale-110' : ''
                                 }`}
-                                src={nftImg}
-                                alt=""
+                                src={cardImg}
+                                alt=`NFT card - ${cardName}`
                             />
                         </div>
                     </div>
                     <div className="px-3 pt-3">
-                        <p className="mb-2 font-bold">1234</p>
-                        <p className="font-bold pb-0">29.09 ETH</p>
+                        <p className="mb-2 font-bold">{cardName}</p>
+                        <p className="font-bold pb-0">{priceFormat(cardPrice)}</p>
                     </div>
                     <p className={`${isHovered ? 'hidden' : 'px-3 pb-3 pt-0'} text-slate-600`}>
-                        Last sale: 23.01 ETH
+                        Last sale: {priceFormat(lastSoldPrice)}
                     </p>
                     {isHovered && (
                         <div className="p-0 pt-1">
