@@ -27,7 +27,7 @@ const NFTCard = ({
                                     isHovered ? 'scale-110' : ''
                                 }`}
                                 src={cardImg}
-                                alt=`NFT card - ${cardName}`
+                                alt={`NFT card - ${cardName}`}
                             />
                         </div>
                     </div>
