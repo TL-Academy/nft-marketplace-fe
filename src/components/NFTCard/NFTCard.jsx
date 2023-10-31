@@ -1,16 +1,12 @@
 import { useState } from 'react';
 
-const NFTCard = ({
-    cardImg,
-    cardName,
-    cardPrice,
-    lastSoldPrice
-}) => {
+const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice }) => {
     const [isHovered, setIsHovered] = useState(false);
 
     const priceFormat = (price) => {
-        return `${price.toFixed(2)} ETH`
-    } 
+        const formatted = Number(price).toFixed(2);
+        return `${formatted} ETH`;
+    };
 
     return (
         <div className="flex mt-24">
