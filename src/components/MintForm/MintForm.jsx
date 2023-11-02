@@ -70,7 +70,7 @@ const MintForm = () => {
 
     return (
         <div
-            className={`${classes.responsive1} m-auto w-full pt-[136px] h-full mb-10`}
+            className={`${classes.responsive1} m-auto w-full my-10 h-full`}
         >
             <div
                 className={` ${classes.headingDiv} w-full gap-36 justify-center`}
