@@ -7,7 +7,7 @@ const NavBar = () => {
 
   return (
     <nav className={`${classes.navbar} bg-black w-full top-0 left-0 border-b`}>
-      <div className="flex flex-wrap items-center justify-between mx-2 p-4">
+      <div className="flex flex-wrap items-center justify-between mx-9 p-4">
         <a href="/" className="flex items-center mr-5">
           <span className={`font-semibold text-2xl text-white inline-block ${classes.logoResponsive}`}>
             NFT Academy

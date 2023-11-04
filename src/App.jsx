@@ -1,13 +1,15 @@
 import './App.css';
 import MintForm from './components/MintForm/MintForm';
-import NavBar from './components/NavBar/NavBar'
+import NavBar from './components/NavBar/NavBar';
 
 function App() {
     return (
-        <main className='mx-auto w-full max-w-[2560px] px-4 sm:px-8 xxl:px-16'>
+        <>
             <NavBar />
-            <MintForm />
-        </main>
+            <main className='mx-auto w-full max-w-[2560px] px-4 sm:px-8 xxl:px-16'>
+                <MintForm />
+            </main>
+        </>
     );
 }
 
