@@ -20,7 +20,7 @@ const Container1 = () => {
             </form>
             <div className="text-center lg:w-1/3 mt-4 lg:mt-0">
                 <h2 className="text-2xl font-bold">Join the community</h2>
-                <ul className="flex justify-center pt-4 space-x-8 text-4xl">
+                <ul className="flex flex-wrap justify-center pt-4 space-x-8 text-4xl">
                     <li className="px-2 py-1 rounded hover:bg-lightBlue-400 transform scale-110 transition duration-300">
                         <a href={''}>
                             <i className="fab fa-twitter icon"></i>
