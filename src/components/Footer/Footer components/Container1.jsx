@@ -21,27 +21,27 @@ const Container1 = () => {
             <div className="text-center lg:w-1/3 mt-4 lg:mt-0">
                 <h2 className="text-2xl font-bold">Join the community</h2>
                 <ul className="flex flex-wrap justify-center pt-4 space-x-8 text-4xl">
-                    <li className="px-2 py-1 rounded hover:bg-lightBlue-400 transform scale-110 transition duration-300">
+                    <li className="mt-2 px-2 py-1 rounded hover:bg-lightBlue-400 transform scale-110 transition duration-300">
                         <a href={''}>
                             <i className="fab fa-twitter icon"></i>
                         </a>
                     </li>
-                    <li className="px-2 py-1 rounded hover:bg-lightBlue-400 transform scale-110 transition duration-300">
+                    <li className="mt-2 px-2 py-1 rounded hover:bg-lightBlue-400 transform scale-110 transition duration-300">
                         <a href={''}>
                             <i className="fab fa-instagram icon"></i>
                         </a>
                     </li>
-                    <li className="px-2 py-1 rounded hover:bg-lightBlue-400 transform scale-110 transition duration-300">
+                    <li className="mt-2 px-2 py-1 rounded hover:bg-lightBlue-400 transform scale-110 transition duration-300">
                         <a href={''}>
                             <i className="fab fa-discord icon"></i>
                         </a>
                     </li>
-                    <li className="px-2 py-1 rounded hover:bg-lightBlue-400 transform scale-110 transition duration-300">
+                    <li className="mt-2 px-2 py-1 rounded hover:bg-lightBlue-400 transform scale-110 transition duration-300">
                         <a href={''}>
                             <i className="fab fa-reddit icon"></i>
                         </a>
                     </li>
-                    <li className="px-2 py-1 rounded hover:bg-lightBlue-400 transform scale-110 transition duration-300">
+                    <li className="mt-2 px-2 py-1 rounded hover:bg-lightBlue-400 transform scale-110 transition duration-300">
                         <a href={''}>
                             <i className="fab fa-youtube icon"></i>
                         </a>
