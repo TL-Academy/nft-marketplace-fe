@@ -13,7 +13,7 @@ const Container1 = () => {
                         type="text"
                         placeholder="Your email address"
                     />
-                    <button className="w-full lg:w-1/3 h-10 bg-blue-500 mt-2 lg:mt-0 rounded hover:bg-lightBlue-400 transform scale-110 transition duration-300">
+                    <button className="w-full lg:w-1/3 h-10 bg-blue-500 mt-2 lg:mt-0 rounded hover:bg-lightBlue-400 transform transition duration-300">
                         Sign up
                     </button>
                 </div>
