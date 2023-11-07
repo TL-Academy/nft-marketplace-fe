@@ -4,6 +4,7 @@ import NavBar from './components/NavBar/NavBar';
 import ConnectMetamask from './components/ConnectMetamask';
 import NFTCard from './components/NFTCard/NFTCard';
 import { Route, Routes } from 'react-router-dom';
+import Footer from "./components/Footer/Footer.jsx";
 
 function App() {
     return (
@@ -16,6 +17,9 @@ function App() {
                     <Route path="/card-info" element={<NFTCard />} />
                 </Routes>
             </main>
+            <footer>
+                <Footer/>
+            </footer>
         </>
     );
 }
