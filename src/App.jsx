@@ -5,6 +5,10 @@ import ConnectMetamask from './components/ConnectMetamask';
 import NFTCard from './components/NFTCard/NFTCard';
 import { Route, Routes } from 'react-router-dom'
 
+// 
+import ConnectMetamask from './components/ConnectMetamask';
+import NFTCard from './components/NFTCard/NFTCard';
+
 function App() {
     return (
         <>
