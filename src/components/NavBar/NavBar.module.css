@@ -1,0 +1,61 @@
+.toggleButton {
+    position: absolute;
+    top: 1.25rem;
+    right: 1rem;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+}
+
+.profileButton {
+    display: flex
+}
+
+@media screen and (min-width: 341px) and (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .toggleButton {
+        display: flex;
+    }
+
+    .navbarlinks {
+        display: none;
+        width: 100%;
+    }
+
+    .navbarlinks ul {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .navbarlinks ul li {
+        text-align: center;
+    }
+
+    .navbarlinks ul li a {
+        padding: .5rem 1rem;
+    }
+
+    .profileButton {
+        display: none
+    }
+
+    .logoResponsive {
+        margin-left: -2rem
+    }
+
+    .loginResponsive {
+        margin: 0 auto;
+        padding: 10px;
+        flex-direction: column;
+        text-align: center;
+        padding: .5rem 1rem;
+        align-items: flex-start;
+    }
+
+}
