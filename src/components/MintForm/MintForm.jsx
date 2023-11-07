@@ -65,6 +65,7 @@ const MintForm = () => {
                     },
                 },
             );
+            // TODO: save IpfsHash
             if (res.status === 200) {
                 alert('NFT Uploaded successfully!');
             }
@@ -100,6 +101,7 @@ const MintForm = () => {
         if (file) {
             const imageUrl = URL.createObjectURL(file);
             setSelectedImage(imageUrl);
+            setFile(file);
         }
     };
 
