@@ -37,7 +37,7 @@ const NavBar = () => {
             </li>
             <li>
               <Link
-                to="/mint"
+                to="/create"
                 className="block py-2 pl-3 pr-4 font-bold text-white rounded md:hover:bg-transparent md:hover:text-gray-400 md:p-0"
               >
                 Mint
