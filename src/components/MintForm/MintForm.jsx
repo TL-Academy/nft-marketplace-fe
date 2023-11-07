@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import classes from './MintForm.module.css';
+import axios from 'axios';
+
+const jwtToken = import.meta.env.VITE_PINATA_JWT;
 
 const MintForm = () => {
     const initialValues = {
@@ -9,6 +12,7 @@ const MintForm = () => {
     };
     const [formData, setFormData] = useState(initialValues);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [file, setFile] = useState(null);
     const [isHovered, setIsHovered] = useState(false);
 
     const handleChange = (e) => {
@@ -24,17 +28,53 @@ const MintForm = () => {
         if (file) {
             const imageUrl = URL.createObjectURL(file);
             setSelectedImage(imageUrl);
+            setFile(file);
         } else {
             setSelectedImage(null);
         }
         e.target.value = '';
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // TODO: add logic to save the NFT
-        console.log(formData);
+
+        const pinataFormData = new FormData();
+        pinataFormData.append('file', file);
+
+        const metaData = JSON.stringify({
+            name: formData.name,
+            description: formData.description,
+        });
+
+        pinataFormData.append('pinataMetadata', metaData);
+
+        const options = JSON.stringify({
+            cidVersion: 0,
+        });
+        pinataFormData.append('pinataOptions', options);
+
+        try {
+            const res = await axios.post(
+                'https://api.pinata.cloud/pinning/pinFileToIPFS',
+                pinataFormData,
+                {
+                    maxBodyLength: 'Infinity',
+                    headers: {
+                        'Content-Type': `multipart/form-data; boundary=${pinataFormData._boundary}`,
+                        Authorization: `Bearer ${jwtToken}`,
+                    },
+                },
+            );
+            // TODO: save IpfsHash
+            if (res.status === 200) {
+                alert('NFT Uploaded successfully!');
+            }
+        } catch (error) {
+            console.error('Error pinning file to IPFS:', error);
+        }
+
         setFormData(initialValues);
+        setSelectedImage(null);
     };
 
     const handleDragEnter = (e) => {
@@ -61,6 +101,7 @@ const MintForm = () => {
         if (file) {
             const imageUrl = URL.createObjectURL(file);
             setSelectedImage(imageUrl);
+            setFile(file);
         }
     };
 
