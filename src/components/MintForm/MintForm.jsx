@@ -39,12 +39,7 @@ const MintForm = () => {
         const ipfsHash = await pinFileToIpfs(file);
 
         if (ipfsHash) {
-            const metadata = {
-                name: formData.name,
-                description: formData.description,
-                IpfsHash: ipfsHash,
-            };
-            await pinJsonToIpfs(metadata);
+            await pinJsonToIpfs(formData.name, formData.description, ipfsHash);
         }
 
         setFormData(initialValues);

@@ -1,7 +1,7 @@
 const baseUrl = 'https://api.pinata.cloud/pinning/pinJSONToIPFS';
 const jwtToken = import.meta.env.VITE_PINATA_JWT;
 
-async function pinJsonToIpfs({ name, description, IpfsHash }) {
+async function pinJsonToIpfs(name, description, IpfsHash) {
     const data = JSON.stringify({
         pinataContent: {
             name,
