@@ -13,7 +13,6 @@ function App() {
             <main className="mx-auto w-full max-w-[2560px] px-4 sm:px-8 xxl:px-16">
                 <Routes>
                     <Route path="/create" element={<MintForm />} />
-                    <Route path="/login" element={<ConnectMetamask />} />
                     <Route path="/card-info" element={<NFTCard />} />
                 </Routes>
             </main>
