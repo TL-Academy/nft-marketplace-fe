@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import classes from './MintForm.module.css';
-import axios from 'axios';
 import pinJsonToIpfs from '../../services/pinJsontoIPFS';
-
-const jwtToken = import.meta.env.VITE_PINATA_JWT;
+import pinFileToIpfs from '../../services/pinFileToIpfs';
 
 const MintForm = () => {
     const initialValues = {
@@ -38,46 +36,15 @@ const MintForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const ipfsHash = await pinFileToIpfs(file);
 
-        const pinataFormData = new FormData();
-        pinataFormData.append('file', file);
-
-        const metaData = JSON.stringify({
-            name: formData.name,
-            description: formData.description,
-        });
-
-        pinataFormData.append('pinataMetadata', metaData);
-
-        const options = JSON.stringify({
-            cidVersion: 0,
-        });
-        pinataFormData.append('pinataOptions', options);
-
-        try {
-            const res = await axios.post(
-                'https://api.pinata.cloud/pinning/pinFileToIPFS',
-                pinataFormData,
-                {
-                    maxBodyLength: 'Infinity',
-                    headers: {
-                        'Content-Type': `multipart/form-data; boundary=${pinataFormData._boundary}`,
-                        Authorization: `Bearer ${jwtToken}`,
-                    },
-                },
-            );
-            // TODO: save IpfsHash
-            const { IpfsHash } = await res.data;
-            if (res.status === 200) {
-                const metadata = {
-                    name: formData.name,
-                    description: formData.description,
-                    IpfsHash: IpfsHash,
-                };
-                pinJsonToIpfs(metadata);
-            }
-        } catch (error) {
-            console.error('Error pinning file to IPFS:', error);
+        if (ipfsHash) {
+            const metadata = {
+                name: formData.name,
+                description: formData.description,
+                IpfsHash: ipfsHash,
+            };
+            await pinJsonToIpfs(metadata);
         }
 
         setFormData(initialValues);
