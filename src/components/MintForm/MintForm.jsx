@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import classes from './MintForm.module.css';
 import axios from 'axios';
+import pinJsonToIpfs from '../../services/pinJsontoIPFS';
 
 const jwtToken = import.meta.env.VITE_PINATA_JWT;
 
@@ -66,8 +67,14 @@ const MintForm = () => {
                 },
             );
             // TODO: save IpfsHash
+            const { IpfsHash } = await res.data;
             if (res.status === 200) {
-                alert('NFT Uploaded successfully!');
+                const metadata = {
+                    name: formData.name,
+                    description: formData.description,
+                    IpfsHash: IpfsHash,
+                };
+                pinJsonToIpfs(metadata);
             }
         } catch (error) {
             console.error('Error pinning file to IPFS:', error);
