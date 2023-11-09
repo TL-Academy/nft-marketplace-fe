@@ -44,6 +44,7 @@ const MintForm = () => {
 
         setFormData(initialValues);
         setSelectedImage(null);
+        setFile(null);
     };
 
     const handleDragEnter = (e) => {
