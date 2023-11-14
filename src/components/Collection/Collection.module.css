@@ -1,7 +1,21 @@
+.responsiveDesktop {
+  display: flex;
+}
+
+.responsivePhone {
+  display: none
+}
+
 @media screen and (max-width: 640px) {
   
-    .text2xlSmartphone {
-      font-size: 1.5rem;
+    .responsiveDesktop {
+      display: none;
+    }
+
+    .responsivePhone {
+      display: flex;
+      font-size: medium
+      
     }
   
   }
