@@ -9,15 +9,14 @@ const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice }) => {
     };
 
     return (
-        <div className="flex mt-24">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 w-3/4">
+            <div className="w-1/2 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 2xl:w-1/6 px-2 mb-4">
                 <div
                     className="shadow-xl rounded-lg overflow-hidden cursor-pointer "
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                 >
                     <div className="relative">
-                        <div className="h-64 overflow-hidden rounded-lg">
+                        <div className="sm:h-64 h-44 overflow-hidden rounded-lg">
                             <img
                                 className={`w-full h-full object-cover transition-all duration-500 ${
                                     isHovered ? 'scale-110' : ''
@@ -50,7 +49,6 @@ const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice }) => {
                     )}
                 </div>
             </div>
-        </div>
     );
 };
 
