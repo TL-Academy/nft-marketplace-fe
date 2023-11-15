@@ -36,7 +36,7 @@ const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice }) => {
                     </p>
                     {isHovered && (
                         <div className="p-0 pt-1">
-                            <button className="w-3/4 py-1 text-slate-200 bg-blue-700 border-r-2">
+                            <button className="w-3/4 py-1 font-bold text-slate-200 bg-blue-700 border-r-2">
                                 Buy now
                             </button>
 
