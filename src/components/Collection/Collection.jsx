@@ -1,5 +1,6 @@
 import NFTCard from '../NFTCard/NFTCard';
 import classes from './Collection.module.css';
+import jsonData from './data.json'
 
 const Collection = () => {
     return (
@@ -21,23 +22,23 @@ const Collection = () => {
                         className={`ml-auto justify-end space-x-8 sm:text-lg ${classes.responsiveDesktop}`}
                     >
                         <div className="flex flex-col">
-                            <span className="font-bold text-base">1111111 ETH</span>
+                            <span className="font-bold text-base">---- ETH</span>
                             <span className="text-slate-600 text-base font-semibold">Total volume</span>
                         </div>
                         <div className="flex flex-col">
-                            <span className="font-bold text-base">1111111 ETH</span>
+                            <span className="font-bold text-base">---- ETH</span>
                             <span className="text-slate-600 text-base font-semibold">Floor price</span>
                         </div>
                         <div className="flex flex-col">
-                            <span className="font-bold text-base">1111111 WETH</span>
+                            <span className="font-bold text-base">---- WETH</span>
                             <span className="text-slate-600 text-base font-semibold">Best offer</span>
                         </div>
                         <div className="flex flex-col">
-                            <span className="font-bold text-base">1%</span>
+                            <span className="font-bold text-base">-%</span>
                             <span className="text-slate-600 text-base font-semibold">Listed</span>
                         </div>
                         <div className="flex flex-col">
-                            <span className="font-bold text-base">1,111</span>
+                            <span className="font-bold text-base">----</span>
                             <span className="text-slate-600 text-base font-semibold">Owners</span>
                         </div>
                     </div>
@@ -48,15 +49,15 @@ const Collection = () => {
                         <div className="flex flex-row text-center justify-center">
                             <div className={`flex items-end mb-2`}>
                                 <div className={`flex flex-col mr-5`}>
-                                    <span className="font-bold">11111 ETH</span>
+                                    <span className="font-bold">---- ETH</span>
                                     <span className="text-slate-600 text-sm  font-semibold">Total volume</span>
                                 </div>
                                 <div className="flex flex-col mr-5">
-                                    <span className="font-bold">11111 ETH</span>
+                                    <span className="font-bold">---- ETH</span>
                                     <span className="text-slate-600 text-sm font-semibold">Floor price</span>
                                 </div>
                                 <div className="flex flex-col">
-                                    <span className="font-bold">11111 WETH</span>
+                                    <span className="font-bold">---- WETH</span>
                                     <span className="text-slate-600 text-sm font-semibold">Best offer</span>
                                 </div>
                             </div>
@@ -64,11 +65,11 @@ const Collection = () => {
                         <div className="flex flex-row text-center justify-center">
                             <div className={`flex items-end`}>
                                 <div className={`flex flex-col mr-6`}>
-                                    <span className="font-bold">1%</span>
+                                    <span className="font-bold">-%</span>
                                     <span className="text-slate-600 text-sm font-semibold">Listed</span>
                                 </div>
                                 <div className="flex flex-col">
-                                    <span className="font-bold">1,111</span>
+                                    <span className="font-bold">----</span>
                                     <span className="text-slate-600 text-sm font-semibold">Owners</span>
                                 </div>
                             </div>
@@ -90,15 +91,7 @@ const Collection = () => {
             </div>
             <hr className="mt-1 mb-4" />
             <div className="flex flex-wrap -mx-4">
-                <NFTCard />
-                <NFTCard />
-                <NFTCard />
-                <NFTCard />
-                <NFTCard />
-                <NFTCard />
-                <NFTCard />
-                <NFTCard />
-                <NFTCard />
+                {jsonData.map((data, index) => <NFTCard key={index} {...data}/>)}
             </div>
         </div>
     );
