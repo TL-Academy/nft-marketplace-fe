@@ -34,6 +34,33 @@ const MintForm = () => {
         e.target.value = '';
     };
 
+    const handleConnectionBetweenBeToFe = async () => {
+        const dataToReceive = {
+            address: 'some address',
+            to: '0x27779C8B4da9C6b44c6fEA278c9a736D9b838181',
+            token_id: 123456,
+            token_hash: 'some hash',
+        };
+
+        try {
+            const response = await fetch('/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dataToReceive),
+            });
+
+            if (response.ok) {
+                console.log('Email sent successfully!');
+            } else {
+                console.error('Error sending email:', response.status);
+            }
+        } catch (error) {
+            console.error('Error sending email:', error);
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const ipfsHash = await pinFileToIpfs(file);
@@ -41,6 +68,8 @@ const MintForm = () => {
         if (ipfsHash) {
             await pinJsonToIpfs(formData.name, formData.description, ipfsHash);
         }
+
+        await handleConnectionBetweenBeToFe();
 
         setFormData(initialValues);
         setSelectedImage(null);
