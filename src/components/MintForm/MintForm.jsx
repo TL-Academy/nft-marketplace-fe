@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useState} from 'react';
 import classes from './MintForm.module.css';
 import pinJsonToIpfs from '../../services/pinJsontoIPFS';
 import pinFileToIpfs from '../../services/pinFileToIpfs';
@@ -35,20 +35,16 @@ const MintForm = () => {
     };
 
     const handleConnectionBetweenBeToFe = async () => {
-        const dataToReceive = {
-            address: 'some address',
-            to: '0x27779C8B4da9C6b44c6fEA278c9a736D9b838181',
-            token_id: 123456,
-            token_hash: 'some hash',
-        };
-
         try {
-            const response = await fetch('/send-email', {
+            const response = await fetch('http://localhost:8000/send-email/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(dataToReceive),
+                body: JSON.stringify({
+                    subject: 'Main subject',
+                    message: 'Some message',
+                }),
             });
 
             if (response.ok) {
