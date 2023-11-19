@@ -36,24 +36,35 @@ const MintForm = () => {
 
     const handleConnectionBetweenBeToFe = async () => {
         try {
-            const response = await fetch('http://localhost:8000/send-email/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    subject: 'Main subject',
-                    message: 'Some message',
-                }),
-            });
+            const pinataResponse = await pinJsonToIpfs('name', 'description', 'IpfsHash');
 
-            if (response.ok) {
-                console.log('Email sent successfully!');
+            if (pinataResponse && pinataResponse.ok) {
+                const pinataData = await pinataResponse.json(); // Assuming the response is JSON
+
+                const subject = pinataData.name;
+                const message = pinataData.description;
+
+                const response = await fetch('http://localhost:8000/send-email/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        subject,
+                        message,
+                    }),
+                });
+
+                if (response.ok) {
+                    console.log('Email sent successfully!');
+                } else {
+                    console.error('Error sending email:', response.status);
+                }
             } else {
-                console.error('Error sending email:', response.status);
+                console.error('Error with Pinata API request:', pinataResponse ? pinataResponse.status : 'Unknown error');
             }
         } catch (error) {
-            console.error('Error sending email:', error);
+            console.error('Error:', error);
         }
     };
 
