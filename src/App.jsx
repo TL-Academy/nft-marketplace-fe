@@ -1,7 +1,6 @@
 import './App.css';
 import MintForm from './components/MintForm/MintForm';
 import NavBar from './components/NavBar/NavBar';
-import ConnectMetamask from './components/ConnectMetamask';
 import NFTCard from './components/NFTCard/NFTCard';
 import { Route, Routes } from 'react-router-dom';
 import Footer from "./components/Footer/Footer.jsx";
@@ -12,10 +11,11 @@ function App() {
         <>
             <NavBar />
             <main className="mx-auto w-full max-w-[2560px] px-4 sm:px-8 xxl:px-16">
-                <Collection />
                 <Routes>
                     <Route path="/create" element={<MintForm />} />
                     <Route path="/card-info" element={<NFTCard />} />
+                    <Route path='/collections' element={<Collection />} />
+                    <Route path='/home' element={<Collection />} />
                 </Routes>
             </main>
             <footer>
