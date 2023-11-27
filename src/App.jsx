@@ -5,8 +5,20 @@ import NFTCard from './components/NFTCard/NFTCard';
 import { Route, Routes } from 'react-router-dom';
 import Footer from "./components/Footer/Footer.jsx";
 import Collection from './components/Collection/Collection.jsx'
+import {useEffect} from 'react';
+import {useDispatch} from 'react-redux'
+import { setAddress } from './app/wallet.js';
+import ConnectMetamask from './components/ConnectMetamask.jsx';
 
 function App() {
+
+    const dispatch = useDispatch();
+    const { wallet } = ConnectMetamask();
+    useEffect(()=>{
+        if (wallet) dispatch(setAddress(wallet.accounts[0].address));
+        else dispatch(setAddress(null));
+    },[wallet])
+
     return (
         <>
             <NavBar />

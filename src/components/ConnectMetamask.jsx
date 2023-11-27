@@ -1,6 +1,8 @@
 import { init, useConnectWallet } from '@web3-onboard/react'
 import injectedModule from '@web3-onboard/injected-wallets'
 import { useEffect } from 'react'
+import {useDispatch} from 'react-redux'
+import { setAddress } from '../app/wallet'
 
 const rpcUrl = "https://eth-sepolia.g.alchemy.com/v2/EB_Y3YZKU0iLP46kusxjohflv9CKjsbH"
 const injected = injectedModule();
@@ -21,10 +23,16 @@ init({
 export default function ConnectMetamask() {
 
     const [{ wallet, connecting }, connect, disconnect] = useConnectWallet();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (!window.ethereum) {
             alert("install MetaMask");
+        }
+        if (wallet) {
+            console.log(wallet.accounts[0].address)
+        } else {
+            dispatch(setAddress(null));           
         }
     }, [])
 
