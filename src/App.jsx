@@ -5,12 +5,14 @@ import NFTCard from './components/NFTCard/NFTCard';
 import { Route, Routes } from 'react-router-dom';
 import Footer from "./components/Footer/Footer.jsx";
 import Collection from './components/Collection/Collection.jsx'
+import Notifications from './components/Notification/Notfications.jsx';
 
 function App() {
     return (
         <>
             <NavBar />
             <main className="mx-auto w-full max-w-[2560px] px-4 sm:px-8 xxl:px-16">
+                <Notifications />
                 <Routes>
                     <Route path="/create" element={<MintForm />} />
                     <Route path="/card-info" element={<NFTCard />} />

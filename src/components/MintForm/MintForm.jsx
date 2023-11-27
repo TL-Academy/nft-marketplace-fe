@@ -2,10 +2,14 @@ import { useState } from 'react';
 import classes from './MintForm.module.css';
 import pinJsonToIpfs from '../../services/pinJsontoIPFS';
 import pinFileToIpfs from '../../services/pinFileToIpfs';
-import { useSelector, useDispatch } from "react-redux"
-import { setLoading } from '../../app/notification';
+
+import {useDispatch} from 'react-redux'
+import { addNotification, resolveNotification } from '../../app/notification';
+import getSignature from '../../services/getSignature';
 
 const MintForm = () => {
+    const dispatch = useDispatch();
+
     const initialValues = {
         name: '',
         description: '',
@@ -15,9 +19,6 @@ const MintForm = () => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [file, setFile] = useState(null);
     const [isHovered, setIsHovered] = useState(false);
-
-    const dispatch = useDispatch();
-    const loading = useSelector(state => state.notification.loading);
 
     const handleChange = (e) => {
         setFormData((oldState) => ({
@@ -68,18 +69,19 @@ const MintForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        dispatch(setLoading(true));
-
+        const signature = await getSignature('Minting NFT') // <--- Notification Example
+        dispatch(addNotification(signature)) // <--- Notification Example
+        
         const ipfsHash = await pinFileToIpfs(file);
-
+        
         if (ipfsHash) {
             await pinJsonToIpfs(formData.name, formData.description, ipfsHash);
             console.log(ipfsHash)
         }
-
-        dispatch(setLoading(false));
-
-        await handleConnectionBetweenBeToFe();
+        
+        dispatch(resolveNotification(signature))// <--- Notification Example
+        
+        // await handleConnectionBetweenBeToFe();
 
         setFormData(initialValues);
         setSelectedImage(null);
@@ -262,13 +264,7 @@ const MintForm = () => {
                     <button
                         className={`${classes.respnsiveBtn} text-center text-white text-xl font-bold bg-blue-500 px-12 py-3 rounded-lg self-end`}
                     >
-                        {
-                            loading
-                                ?
-                                <p className='animate-pulse'>Minting...</p>
-                                :
-                                "Create"
-                        }
+                        Create
                     </button>
                 </div>
             </form>
