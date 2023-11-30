@@ -2,7 +2,10 @@ import { useState } from 'react';
 import classes from './MintForm.module.css';
 import pinJsonToIpfs from '../../services/pinJsontoIPFS';
 import pinFileToIpfs from '../../services/pinFileToIpfs';
-import mint from '../../utils/mintNFT';
+import { mint } from '../../utils/mintNFT';
+import addresses from '../../contracts/addresses.json';
+
+const collections = addresses['11155111']['NftCollections'];
 
 const MintForm = () => {
     const initialValues = {
@@ -10,6 +13,8 @@ const MintForm = () => {
         description: '',
         collection: '',
     };
+    const collectionsNames = Object.keys(collections);
+
     const [formData, setFormData] = useState(initialValues);
     const [selectedImage, setSelectedImage] = useState(null);
     const [file, setFile] = useState(null);
@@ -66,7 +71,8 @@ const MintForm = () => {
         if (ipfsHash) {
             const data = await pinJsonToIpfs(formData.name, formData.description, ipfsHash);
             const tokenHash = data['IpfsHash'];
-            mint(tokenHash);
+            const contractAddress = collections[formData.collection].address;
+            mint(tokenHash, contractAddress);
         }
 
         await handleConnectionBetweenBeToFe();
@@ -235,18 +241,17 @@ const MintForm = () => {
                             onChange={handleChange}
                         >
                             <option value="">---------</option>
-                            <option name="option1" className="text-xl" value="1">
-                                Option-1
-                            </option>
-                            <option name="option2" className="text-xl" value="2">
-                                Option-2
-                            </option>
-                            <option name="option3" className="text-xl" value="3">
-                                Option-3
-                            </option>
-                            <option name="option4" className="text-xl" value="4">
-                                Option-4
-                            </option>
+
+                            {collectionsNames.map((collection, idx) => (
+                                <option
+                                    key={idx}
+                                    name="option4"
+                                    className="text-xl"
+                                    value={collection}
+                                >
+                                    {collection}
+                                </option>
+                            ))}
                         </select>
                     </div>
                     <button
