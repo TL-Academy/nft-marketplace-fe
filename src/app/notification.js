@@ -3,33 +3,23 @@ import { createSlice } from "@reduxjs/toolkit";
 const slice = createSlice({
     name: 'notification',
     initialState: {
-        notifications: {},
-        resolved: {},
+        notifications: [],
     },
     reducers: {
         addNotification: (state, action) => {
-            const [signature, message] = action.payload;
-            console.log(signature, message)
-            state.notifications[signature] = message;
+            state.notifications.push(action.payload);
         },
-        resolveNotification: (state, action) => {
-            const signature = action.payload[0]
-            state.resolved[signature] = state.notifications[signature];
-            delete state.notifications[signature];
+        removeNotification: (state) => {
+            state.notifications.shift();
         },
-        removeResolved: (state, action) => {
-            delete state.resolved[action.payload];
-        }
     }
 });
 
 export const {
     addNotification,
-    resolveNotification,
-    removeResolved
+    removeNotification,
 } = slice.actions;
 
 export default slice.reducer;
 
 export const selectNotifications = (state) => state.notification.notifications;
-export const selectResolved = (state) => state.notification.resolved;

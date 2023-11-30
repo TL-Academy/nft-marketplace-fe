@@ -4,8 +4,7 @@ import pinJsonToIpfs from '../../services/pinJsontoIPFS';
 import pinFileToIpfs from '../../services/pinFileToIpfs';
 
 import {useDispatch} from 'react-redux'
-import { addNotification, resolveNotification } from '../../app/notification';
-import getSignature from '../../services/getSignature';
+import { addNotification } from '../../app/notification';
 
 const MintForm = () => {
     const dispatch = useDispatch();
@@ -69,17 +68,17 @@ const MintForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const signature = await getSignature('Minting NFT') // <--- Notification Example
-        dispatch(addNotification(signature)) // <--- Notification Example
+        dispatch(addNotification({message: 'Minting NFT', status: 'in-progress'})) 
         
         const ipfsHash = await pinFileToIpfs(file);
         
         if (ipfsHash) {
             await pinJsonToIpfs(formData.name, formData.description, ipfsHash);
+            dispatch(addNotification({message: 'Minting NFT', status: 'success'})) 
             console.log(ipfsHash)
+        } else {
+            dispatch(addNotification({message: 'Minting NFT', status: 'error'})) 
         }
-        
-        dispatch(resolveNotification(signature))// <--- Notification Example
         
         // await handleConnectionBetweenBeToFe();
 
