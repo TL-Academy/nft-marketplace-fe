@@ -8,12 +8,13 @@ export default function Notifications() {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        const timer = (notifications.length != 0 && notifications[0].timeout) ? notifications[0].timeout : 3000
         const timeoutId = setTimeout(() => {
             if (notifications.length != 0) {
                 dispatch(removeNotification());
             }
-        }, 3000);
-        return () => clearTimeout(timeoutId);
+        }, timer);
+        return () => clearTimeout(timer);
     }, [notifications])
 
     return (

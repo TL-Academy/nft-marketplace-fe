@@ -68,7 +68,7 @@ const MintForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        dispatch(addNotification({message: 'Minting NFT', status: 'in-progress'})) 
+        dispatch(addNotification({message: 'Minting NFT', status: 'in-progress', timeout: 5000})) 
         
         const ipfsHash = await pinFileToIpfs(file);
         
