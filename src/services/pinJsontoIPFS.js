@@ -21,8 +21,8 @@ async function pinJsonToIpfs(name, description, IpfsHash) {
             },
             body: data,
         });
-        return response;
-        // const resData = await response.json();
+        const resData = await response.json();
+        return resData;
     } catch (err) {
         console.log(err);
     }
