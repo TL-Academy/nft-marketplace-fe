@@ -1,30 +1,30 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { selectNotifications, removeNotification } from '../../app/notification';
+import { selectNotifications, removeNotification, firstNotification } from '../../app/notification';
 import { useEffect } from 'react';
 
 export default function Notifications() {
 
     const notifications = useSelector(selectNotifications);
+    const _firstNotification = useSelector(firstNotification)
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const timer = (notifications.length != 0 && notifications[0].timeout) ? notifications[0].timeout : 3000
         const timeoutId = setTimeout(() => {
-            if (notifications.length != 0) {
+            if (_firstNotification) {
                 dispatch(removeNotification());
             }
-        }, timer);
-        return () => clearTimeout(timer);
+        }, _firstNotification && _firstNotification.timeout);
+        return () => clearTimeout(timeoutId);
     }, [notifications])
 
     return (
         <>
             {
-                notifications.length != 0 &&
+                _firstNotification &&
                 <p 
                     className="absolute top-0 mx-auto sticky bg-gray-100 opacity-50 z-10 text-center"
                 >
-                    {notifications[0].message} - {notifications[0].status}
+                    {_firstNotification.message} - {_firstNotification.status}
                 </p>
             }
         </>
