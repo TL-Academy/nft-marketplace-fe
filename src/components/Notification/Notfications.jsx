@@ -9,19 +9,19 @@ export default function Notifications() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            if (_firstNotification) {
+        if (_firstNotification) {
+            const timeoutId = setTimeout(() => {
                 dispatch(removeNotification());
-            }
-        }, _firstNotification && _firstNotification.timeout);
-        return () => clearTimeout(timeoutId);
+            }, _firstNotification.timeout);
+            return () => clearTimeout(timeoutId);
+        }
     }, [notifications])
 
     return (
         <>
             {
                 _firstNotification &&
-                <p 
+                <p
                     className="absolute top-0 mx-auto sticky bg-gray-100 opacity-50 z-10 text-center"
                 >
                     {_firstNotification.message} - {_firstNotification.status}
