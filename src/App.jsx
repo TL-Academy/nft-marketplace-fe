@@ -5,10 +5,12 @@ import NFTCard from './components/NFTCard/NFTCard';
 import { Route, Routes } from 'react-router-dom';
 import Footer from "./components/Footer/Footer.jsx";
 import Collection from './components/Collection/Collection.jsx'
-
+import { Provider } from 'react-redux';
+import configureStore from './components/Collection/redux/store.js'
+const store = configureStore();
 function App() {
     return (
-        <>
+        <Provider store={store}>
             <NavBar />
             <main className="mx-auto w-full max-w-[2560px] px-4 sm:px-8 xxl:px-16">
                 <Routes>
@@ -21,7 +23,7 @@ function App() {
             <footer>
                 <Footer/>
             </footer>
-        </>
+        </Provider>
     );
 }
 

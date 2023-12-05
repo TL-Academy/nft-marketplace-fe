@@ -1,8 +1,12 @@
 import NFTCard from '../NFTCard/NFTCard';
 import classes from './Collection.module.css';
 import jsonData from './data.json'
+import { useSelector } from 'react-redux';
 
 const Collection = () => {
+
+    const mintedNFTs = useSelector((state) => state.nfts.mintedNFTs)
+    console.log(mintedNFTs);
     return (
         <div className="flex flex-col h-full bg-white">
             <div className="h-[340px] flex flex-col justify-end">
@@ -91,7 +95,7 @@ const Collection = () => {
             </div>
             <hr className="mt-1 mb-4" />
             <div className="flex flex-wrap -mx-4">
-                {jsonData.map((data, index) => <NFTCard key={index} {...data}/>)}
+                {mintedNFTs.map((data, index) => <NFTCard key={index} {...data}/>)}
             </div>
         </div>
     );
