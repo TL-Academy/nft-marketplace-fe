@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice }) => {
     const [isHovered, setIsHovered] = useState(false);
-
+    
     const priceFormat = (price) => {
         const formatted = Number(price).toFixed(2);
         return `${formatted} ETH`;
