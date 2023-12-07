@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
-import { EventTypes, PROVIDER_ADDRESS, CONTRACT_ADDRESS, ETHERSCAN_API_KEY } from '../../../constants/constants.js';
-import { setMintedNFTs } from '../../../redux/collectionSlice.js';
-import { store } from '../../../redux/store.js';
+import { EventTypes, PROVIDER_ADDRESS, CONTRACT_ADDRESS, ETHERSCAN_API_KEY } from '../../constants/constants.js';
+import { setMintedNFTs } from '../../redux/collectionSlice.js';
+import { store } from '../../redux/store.js';
 
 // @todo move to constan
 export const provider = new ethers.providers.JsonRpcProvider(
