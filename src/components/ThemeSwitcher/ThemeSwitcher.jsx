@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { toggleTheme } from './themeSlice';
+import { toggleTheme, selectTheme } from './themeSlice';
 
 const DarkMode = () => {
     const dispatch = useDispatch();
-    const theme = useSelector((state) => state.theme.theme);
+    const theme = useSelector(selectTheme);
     const htmlElementRef = useRef(document.documentElement);
 
     useEffect(() => {
