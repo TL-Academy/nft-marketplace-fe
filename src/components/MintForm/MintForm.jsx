@@ -231,7 +231,7 @@ const MintForm = () => {
                         </label>
                         <textarea
                             placeholder="Enter a description"
-                            className="h-auto w-full rounded-lg p-3 placeholder:text-secondary bg-transparent outline-none min-h-[26px] text-[16px] leading-[26px] sm:font-[inherit] sm:leading-[inherit] sm:text-[inherit] border border-level-2 transition duration-200 hover:border-level-3 focus-within:shadow-none focus-within:hover:shadow-none focus-within:border-level-3 no-scrollbar resize-none dark:text-white"
+                            className="h-auto w-full rounded-lg p-3 placeholder:text-secondary dark:bg-d-primary outline-none min-h-[26px] text-[16px] leading-[26px] sm:font-[inherit] sm:leading-[inherit] sm:text-[inherit] border border-level-2 resize-none dark:text-white"
                             name="description"
                             id="description"
                             rows="4"

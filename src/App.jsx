@@ -10,7 +10,7 @@ function App() {
     return (
         <>
             <NavBar />
-            <main className="mx-auto w-full max-w-[2560px] px-4 sm:px-8 xxl:px-16 dark:bg-d-primary">
+            <main className="mx-auto w-full max-w-[2560px] transition-all duration-300 px-4 sm:px-8 xxl:px-16 dark:bg-d-primary">
                 <Routes>
                     <Route path="/create" element={<MintForm />} />
                     <Route path="/card-info" element={<NFTCard />} />

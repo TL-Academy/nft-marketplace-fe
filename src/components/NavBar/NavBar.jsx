@@ -17,7 +17,7 @@ const NavBar = () => {
 
     return (
         <nav
-            className={`${classes.navbar} bg-blooey w-full top-0 left-0 border-b border-black dark:border-d-secondary dark:bg-d-primary`}
+            className={`${classes.navbar} bg-blooey transition-all duration-300 w-full top-0 left-0 border-b border-black dark:border-d-secondary dark:bg-d-primary`}
         >
             <div className="flex flex-wrap items-center justify-between mx-9 p-4">
                 <Link to="/" className="flex items-center mr-5">
