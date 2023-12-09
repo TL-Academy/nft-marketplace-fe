@@ -5,6 +5,7 @@ import NFTCard from './components/NFTCard/NFTCard';
 import { Route, Routes } from 'react-router-dom';
 import Footer from './components/Footer/Footer.jsx';
 import Collection from './components/Collection/Collection.jsx';
+import { useEffect, useState } from 'react';
 
 function App() {
     return (

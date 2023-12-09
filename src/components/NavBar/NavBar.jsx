@@ -113,7 +113,7 @@ const NavBar = () => {
                         to="/account"
                         className={`text-black bg-white dark:text-white dark:bg-d-secondary font-medium rounded-lg text-sm px-4 py-2 text-center ${classes.profileButton}`}
                     >
-                        <span class="material-symbols-outlined">account_circle</span>
+                        <span className="material-symbols-outlined">account_circle</span>
                     </Link>
                     <DarkMode />
                 </div>

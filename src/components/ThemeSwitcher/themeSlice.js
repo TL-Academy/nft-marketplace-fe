@@ -8,6 +8,7 @@ const themeSlice = createSlice({
     reducers: {
         toggleTheme: (state) => {
             state.theme = state.theme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('theme', state.theme);
         },
     },
 });
