@@ -4,7 +4,7 @@ import jsonData from './data.json';
 
 const Collection = () => {
     return (
-        <div className="flex flex-col h-full bg-white dark:bg-d-primary">
+        <div className="flex flex-col h-full bg-white dark:bg-d-primary transition-all duration-300">
             <div className="h-[340px] flex flex-col justify-end">
                 <div className={`flex items-end sm:mb-6`}>
                     <div className={`flex flex-col`}>

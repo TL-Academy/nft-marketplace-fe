@@ -5,7 +5,7 @@ import { toggleTheme, selectTheme } from './themeSlice';
 const DarkMode = () => {
     const dispatch = useDispatch();
     const theme = useSelector(selectTheme);
-    const htmlElementRef = useRef(document.documentElement);
+    const htmlElementRef = useRef(document.body);
 
     useEffect(() => {
         if (theme === 'dark') {

@@ -210,10 +210,10 @@ const MintForm = () => {
                             className="flex items-center font-bold mb-3 dark:text-white"
                             htmlFor="name"
                         >
-                            Name *
+                            Name*
                         </label>
                         <input
-                            className="flex h-12 w-full items-center rounded-xl p-3 text-md border border-level-2 outline-none dark:bg-d-primary dark:text-white"
+                            className="flex h-12 w-full items-center transition-all duration-300 rounded-xl p-3 text-md border border-level-2 outline-none dark:bg-d-primary dark:text-white"
                             placeholder="Name your NFT"
                             type="text"
                             id="name"
@@ -227,11 +227,11 @@ const MintForm = () => {
                             className="flex flex-col font-bold mb-3 dark:text-white"
                             htmlFor="description"
                         >
-                            Description:
+                            Description*:
                         </label>
                         <textarea
                             placeholder="Enter a description"
-                            className="h-auto w-full rounded-lg p-3 placeholder:text-secondary dark:bg-d-primary outline-none min-h-[26px] text-[16px] leading-[26px] sm:font-[inherit] sm:leading-[inherit] sm:text-[inherit] border border-level-2 resize-none dark:text-white"
+                            className="h-auto w-full rounded-lg p-3 placeholder:text-secondary transition-all duration-300 dark:bg-d-primary outline-none min-h-[26px] text-[16px] leading-[26px] sm:font-[inherit] sm:leading-[inherit] sm:text-[inherit] border border-level-2 resize-none dark:text-white"
                             name="description"
                             id="description"
                             rows="4"
@@ -244,10 +244,10 @@ const MintForm = () => {
                             className="flex flex-col mb-3 font-bold dark:text-white"
                             htmlFor="collection"
                         >
-                            Collection *
+                            Collection*
                         </label>
                         <select
-                            className="p-4 bg-transparent hover:border-level-3 border border-level-2 rounded-lg cursor-pointer dark:bg-d-primary dark:text-white"
+                            className="p-4 bg-transparent hover:border-level-3 border transition-all duration-300 border-level-2 rounded-lg cursor-pointer dark:bg-d-primary dark:text-white"
                             name="collection"
                             id="collection"
                             value={formData.collection}
