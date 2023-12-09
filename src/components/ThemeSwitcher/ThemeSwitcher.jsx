@@ -10,8 +10,17 @@ const DarkMode = () => {
     useEffect(() => {
         if (theme === 'dark') {
             htmlElementRef.current.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
         } else {
             htmlElementRef.current.classList.remove('dark');
+            localStorage.removeItem('theme');
+        }
+    }, [theme]);
+
+    useEffect(() => {
+        const storedTheme = localStorage.getItem('theme');
+        if (storedTheme === 'dark') {
+            htmlElementRef.current.classList.add('dark');
         }
     }, [theme]);
 
