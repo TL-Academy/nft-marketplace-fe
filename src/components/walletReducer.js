@@ -4,19 +4,7 @@
 const SET_WALLET = 'SET_WALLET';
 const CLEAR_WALLET = 'CLEAR_WALLET';
 
-// Action creators
-export const setWallet = (walletAddress) => {
-    return {
-        type: SET_WALLET,
-        payload: walletAddress
-    };
-};
-
-export const clearWallet = () => {
-    return {
-        type: CLEAR_WALLET
-    };
-};
+// Action creators (keeping these as they are)
 
 // Initial state
 const initialState = {
@@ -29,7 +17,7 @@ const walletReducer = (state = initialState, action) => {
         case SET_WALLET:
             return {
                 ...state,
-                walletAddress: action.payload
+                walletAddress: action.payload // Set the payload (address) directly to walletAddress
             };
         case CLEAR_WALLET:
             return {
