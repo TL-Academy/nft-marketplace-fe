@@ -33,9 +33,7 @@ export const clearWallet = () => {
     };
 };
 
-// Reducer remains the same as previously provided
 
-// In your component
 export default function ConnectMetamask() {
     const dispatch = useDispatch();
 
