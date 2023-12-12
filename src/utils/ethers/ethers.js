@@ -1,9 +1,8 @@
 import { ethers } from 'ethers';
 import { EventTypes, PROVIDER_ADDRESS, CONTRACT_ADDRESS, ETHERSCAN_API_KEY } from '../../constants/constants.js';
-import { setMintedNFTs } from '../../redux/collectionSlice.js';
+import { addMintedNFT, setMintedNFTs } from '../../redux/collectionSlice.js';
 import { store } from '../../redux/store.js';
 
-// @todo move to constan
 export const provider = new ethers.providers.JsonRpcProvider(
     PROVIDER_ADDRESS,
 );
@@ -23,16 +22,43 @@ export const getAllMintedNFTs = () => {
             const fromBlock = 4795836;
             const filter = contract.filters[EventTypes.MINTED]();
             const nfts = await contract.queryFilter(filter, fromBlock, 'latest');
+
             const mintedNFTsData = await Promise.all(
                 nfts.map(async (nft) => {
                     const res = await fetch(`https://ipfs.io/ipfs/${nft.args.tokenHash}`);
+
                     return res.json();
                 }),
             );
+
             dispatch(setMintedNFTs(mintedNFTsData));
+
         } catch (error) {
             console.error("Error fetching Minted NFT's", error);
         }
     }
 };
 store.dispatch(getAllMintedNFTs())
+
+const filter = contract.filters[EventTypes.MINTED]();
+contract.on(filter, async (from, to, value, event) => {
+    let info = {
+        from: from,
+        to: to,
+        value: value,
+        data: event
+    };
+
+    try {
+        const response = await fetch(`https://ipfs.io/ipfs/${info.data}`);
+        
+        if (response.ok) {
+            const jsonData = await response.json();
+            store.dispatch(addMintedNFT(jsonData));
+        } else {
+            console.error('Failed to fetch data from IPFS:', response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error('Error fetching data from IPFS:', error.message);
+    }
+});
