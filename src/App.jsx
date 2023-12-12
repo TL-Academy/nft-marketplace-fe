@@ -5,11 +5,12 @@ import NFTCard from './components/NFTCard/NFTCard';
 import { Route, Routes } from 'react-router-dom';
 import Footer from './components/Footer/Footer.jsx';
 import Collection from './components/Collection/Collection.jsx';
-import { useEffect, useState } from 'react';
+import useTheme from './components/hooks/useTheme.js';
 
 function App() {
+    const { isDark } = useTheme();
     return (
-        <>
+        <div className={`${isDark ? 'dark' : 'light'}`}>
             <NavBar />
             <main className="mx-auto w-full max-w-[2560px] transition-all duration-300 px-4 sm:px-8 xxl:px-16 dark:bg-d-primary">
                 <Routes>
@@ -22,7 +23,7 @@ function App() {
             <footer>
                 <Footer />
             </footer>
-        </>
+        </div>
     );
 }
 

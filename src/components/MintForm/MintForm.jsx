@@ -113,7 +113,7 @@ const MintForm = () => {
     const imgBorder = selectedImage ? '' : 'border border-dashed hover:border-solid';
 
     return (
-        <div className={`${classes.responsive1} m-auto w-full py-10 h-full`}>
+        <div className={`${classes.responsive1}  m-auto w-full py-10 h-full`}>
             <div className={` ${classes.headingDiv} w-full gap-36 justify-center`}>
                 <div className="flex flex-col h-full w-full gap-2 md:max-w-[600px] ">
                     <span className="font-semibold text-3xl dark:text-white">Create an NFT</span>
@@ -133,7 +133,7 @@ const MintForm = () => {
                 {/* left side form - drag and drop file upload */}
                 <div className="w-full h-full md:max-w-[600px]">
                     <div
-                        className={`relative ${imgBorder}  border-slate-500 dark:hover:bg-zinc-800 rounded-lg flex flex-col items-center justify-center cursor-pointer aspect-square `}
+                        className={`relative ${imgBorder} border-slate-500 dark:hover:bg-zinc-800 rounded-lg flex flex-col items-center justify-center cursor-pointer aspect-square `}
                         onMouseEnter={() => setIsHovered(true)}
                         onMouseLeave={() => setIsHovered(false)}
                         onDragEnter={handleDragEnter}

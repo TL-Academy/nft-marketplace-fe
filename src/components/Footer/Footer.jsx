@@ -1,8 +1,10 @@
 import Container1 from './components/Container1.jsx';
 import Container2 from './components/Container2.jsx';
 import Container3 from './components/Container3.jsx';
+import useTheme from '../hooks/useTheme.js';
 
 const Footer = () => {
+    const { isDark } = useTheme();
     return (
         <div className="bg-blooey dark:bg-d-secondary py-8 text-white transition-all duration-300">
             <Container1 />
