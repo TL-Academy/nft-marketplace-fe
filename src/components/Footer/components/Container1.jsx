@@ -9,7 +9,7 @@ const Container1 = () => {
                 </p>
                 <div className="flex flex-col lg:flex-row gap-4 pt-4">
                     <input
-                        className="w-full lg:w-2/3 h-10 px-4 rounded text-black border border-gray-400"
+                        className="w-full lg:w-2/3 h-10 px-4 rounded text-black border border-gray-400 dark:text-white dark:bg-d-secondary"
                         type="text"
                         placeholder="Your email address"
                     />
