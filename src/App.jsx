@@ -5,7 +5,7 @@ import NFTCard from './components/NFTCard/NFTCard';
 import { Route, Routes } from 'react-router-dom';
 import Footer from './components/Footer/Footer.jsx';
 import Collection from './components/Collection/Collection.jsx';
-import useTheme from './components/hooks/useTheme.js';
+import useTheme from './hooks/useTheme.js';
 
 function App() {
     const { isDark } = useTheme();
