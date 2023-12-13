@@ -22,7 +22,7 @@ export default function Notifications() {
             {
                 _firstNotification &&
                 <p
-                    className="absolute top-0 mx-auto sticky bg-gray-100 opacity-50 z-10 text-center"
+                    className="absolute top-0 mx-auto sticky bg-gray-100 opacity-50 z-10 text-center text-xl py-2"
                 >
                     {_firstNotification.message} - {_firstNotification.status}
                 </p>
