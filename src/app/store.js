@@ -1,8 +1,8 @@
-import {configureStore} from '@reduxjs/toolkit';
-import walletReducer from "../components/walletReducer.js";
+import { configureStore } from '@reduxjs/toolkit';
+import themeReducer from '../components/ThemeSwitcher/themeSlice';
 
 export const store = configureStore({
     reducer: {
-        wallet: walletReducer,
+        theme: themeReducer,
     },
 });
