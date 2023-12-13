@@ -6,9 +6,13 @@ export default {
     theme: {
         extend: {
             colors: {
-                ...colors,
+                // ...colors,
+                'd-primary': '#211f1f',
+                'd-secondary': '#27272a', // zinc-800
+                blooey: '#2563eb', // blue-600
             },
         },
     },
     plugins: [],
+    darkMode: 'class',
 };
