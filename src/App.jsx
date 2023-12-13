@@ -6,6 +6,7 @@ import { Route, Routes } from 'react-router-dom';
 import Footer from './components/Footer/Footer.jsx';
 import Collection from './components/Collection/Collection.jsx';
 import useTheme from './hooks/useTheme.js';
+import Notifications from './components/Notification/Notfications.jsx';
 
 function App() {
     const { isDark } = useTheme();
@@ -13,6 +14,7 @@ function App() {
         <div className={`${isDark ? 'dark' : 'light'}`}>
             <NavBar />
             <main className="mx-auto w-full max-w-[2560px] transition-all duration-300 px-4 sm:px-8 xxl:px-16 dark:bg-d-primary">
+                <Notifications />
                 <Routes>
                     <Route path="/create" element={<MintForm />} />
                     <Route path="/card-info" element={<NFTCard />} />

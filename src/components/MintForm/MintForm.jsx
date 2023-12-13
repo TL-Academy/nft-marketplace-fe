@@ -2,6 +2,9 @@ import { useState } from 'react';
 import classes from './MintForm.module.css';
 import pinJsonToIpfs from '../../services/pinJsontoIPFS';
 import pinFileToIpfs from '../../services/pinFileToIpfs';
+
+import {useDispatch} from 'react-redux'
+import { addNotification } from '../../app/notification';
 import { mint } from '../../utils/mintNFT';
 import addresses from '../../contracts/addresses.json';
 
@@ -14,6 +17,7 @@ const MintForm = () => {
         collection: '',
     };
     const collectionsNames = Object.keys(collections);
+    const dispatch = useDispatch();
 
     const [formData, setFormData] = useState(initialValues);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -59,23 +63,29 @@ const MintForm = () => {
             } else {
                 console.error('Error sending email:', response.status);
             }
-        } catch (error) {
+        } catch
+        (error) {
             console.error('Error:', error);
         }
     };
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        dispatch(addNotification({message: 'Minting NFT', status: 'in-progress'})) 
+        
         const ipfsHash = await pinFileToIpfs(file);
-
+        
         if (ipfsHash) {
-            const data = await pinJsonToIpfs(formData.name, formData.description, ipfsHash);
-            const tokenHash = data['IpfsHash'];
-            const contractAddress = collections[formData.collection].address;
-            mint(tokenHash, contractAddress);
+            await pinJsonToIpfs(formData.name, formData.description, ipfsHash);
+            dispatch(addNotification({message: 'Minting NFT', status: 'success'})) 
+            console.log(ipfsHash)
+        } else {
+            dispatch(addNotification({message: 'Minting NFT', status: 'error'})) 
         }
-
-        await handleConnectionBetweenBeToFe();
+        
+        // await handleConnectionBetweenBeToFe();
 
         setFormData(initialValues);
         setSelectedImage(null);
