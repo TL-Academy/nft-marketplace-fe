@@ -2,14 +2,12 @@ import { useState } from 'react';
 import classes from './NavBar.module.css';
 import { Link } from 'react-router-dom';
 import ConnectMetamask from '../ConnectMetamask';
-import useTheme from '../hooks/useTheme';
 import DarkMode from '../ThemeSwitcher/ThemeSwitcher';
 
 const NavBar = () => {
     const [isMenuOpen, setMenuOpen] = useState(false);
 
     const { isConnecting, wallet, connectMetamask, disconnectMetamask } = ConnectMetamask();
-    const { isDark } = useTheme();
 
     const handleWalletAddress = () => {
         const walletAddress = wallet.accounts[0].address;
@@ -18,16 +16,8 @@ const NavBar = () => {
     };
 
     return (
-        <nav
-            className={`${classes.navbar} ${
-                isDark ? 'dark' : 'light'
-            } bg-blooey transition-all duration-300 w-full top-0 left-0 border-b border-black dark:border-d-secondary dark:bg-d-primary`}
-        >
-            <div
-                className={`${
-                    isDark ? 'dark' : 'light'
-                } flex flex-wrap items-center justify-between mx-9 p-4`}
-            >
+        <nav className="bg-blooey transition-all duration-300 w-full top-0 left-0 border-b border-black dark:border-d-secondary dark:bg-d-primary">
+            <div className="flex flex-wrap items-center justify-between mx-9 p-4">
                 <Link to="/" className="flex items-center mr-5">
                     <span
                         className={`font-semibold text-2xl text-white inline-block ${classes.logoResponsive}`}
