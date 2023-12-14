@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice }) => {
     const [isHovered, setIsHovered] = useState(false);
-    
+
     const priceFormat = (price) => {
         const formatted = Number(price).toFixed(2);
         return `${formatted} ETH`;
@@ -21,7 +21,7 @@ const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice }) => {
                             className={`w-full h-full object-cover transition-all duration-500 ${
                                 isHovered ? 'scale-110' : ''
                             }`}
-                            src={cardImg}
+                            src={`https://ipfs.io/ipfs/${cardImg}`}
                             alt={`NFT card - ${cardName}`}
                         />
                     </div>
