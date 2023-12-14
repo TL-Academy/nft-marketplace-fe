@@ -16,6 +16,7 @@ const MintForm = () => {
         collection: '',
     };
     const collectionsNames = Object.keys(collections);
+    const dispatch = useDispatch();
 
     const [formData, setFormData] = useState(initialValues);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -61,23 +62,29 @@ const MintForm = () => {
             } else {
                 console.error('Error sending email:', response.status);
             }
-        } catch (error) {
+        } catch
+        (error) {
             console.error('Error:', error);
         }
     };
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        dispatch(addNotification({message: 'Minting NFT', status: 'in-progress'})) 
+        
         const ipfsHash = await pinFileToIpfs(file);
-
+        
         if (ipfsHash) {
-            const data = await pinJsonToIpfs(formData.name, formData.description, ipfsHash);
-            const tokenHash = data['IpfsHash'];
-            const contractAddress = collections[formData.collection].address;
-            mint(tokenHash, contractAddress);
+            await pinJsonToIpfs(formData.name, formData.description, ipfsHash);
+            dispatch(addNotification({message: 'Minting NFT', status: 'success'})) 
+            console.log(ipfsHash)
+        } else {
+            dispatch(addNotification({message: 'Minting NFT', status: 'error'})) 
         }
-
-        await handleConnectionBetweenBeToFe();
+        
+        // await handleConnectionBetweenBeToFe();
 
         setFormData(initialValues);
         setSelectedImage(null);
@@ -115,11 +122,11 @@ const MintForm = () => {
     const imgBorder = selectedImage ? '' : 'border border-dashed hover:border-solid';
 
     return (
-        <div className={`${classes.responsive1} m-auto w-full my-10 h-full`}>
+        <div className={`${classes.responsive1}  m-auto w-full py-10 h-full`}>
             <div className={` ${classes.headingDiv} w-full gap-36 justify-center`}>
                 <div className="flex flex-col h-full w-full gap-2 md:max-w-[600px] ">
-                    <span className="font-semibold text-3xl">Create an NFT</span>
-                    <span className="text-base">
+                    <span className="font-semibold text-3xl dark:text-white">Create an NFT</span>
+                    <span className="text-base dark:text-white">
                         Once your item is minted you will not be able to change any of its
                         information.
                     </span>
@@ -135,7 +142,7 @@ const MintForm = () => {
                 {/* left side form - drag and drop file upload */}
                 <div className="w-full h-full md:max-w-[600px]">
                     <div
-                        className={`relative ${imgBorder} border-slate-500 rounded-lg flex flex-col items-center justify-center cursor-pointer aspect-square `}
+                        className={`relative ${imgBorder} border-slate-500 dark:hover:bg-zinc-800 rounded-lg flex flex-col items-center justify-center cursor-pointer aspect-square `}
                         onMouseEnter={() => setIsHovered(true)}
                         onMouseLeave={() => setIsHovered(false)}
                         onDragEnter={handleDragEnter}
@@ -157,13 +164,13 @@ const MintForm = () => {
                         <input
                             type="file"
                             id="media"
-                            className="hidden"
+                            className="hidden "
                             onChange={handleImageChange}
                         />
 
                         <label
                             htmlFor="media"
-                            className="absolute inset-0 flex flex-col items-center justify-center space-y-2 cursor-pointer hover:bg-slate-100 transition-all duration-300"
+                            className="absolute inset-0 flex flex-col items-center justify-center space-y-2 cursor-pointer hover:bg-slate-100 dark:hover:bg-zinc-800 transition-all duration-300"
                         >
                             {selectedImage ? (
                                 <div className="w-full h-full">
@@ -177,7 +184,7 @@ const MintForm = () => {
                                 <>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        className="w-12 h-12 text-gray-400"
+                                        className="w-12 h-12 text-gray-400 dark:text-white"
                                         fill="none"
                                         viewBox="0 0 24 24"
                                         stroke="currentColor"
@@ -189,10 +196,14 @@ const MintForm = () => {
                                             d="M12 4v16m8-8H4"
                                         ></path>
                                     </svg>
-                                    <span className="text-gray-600">Drag and drop media</span>
-                                    <span className="text-gray-600">
+                                    <span className="text-gray-600 dark:text-white">
+                                        Drag and drop media
+                                    </span>
+                                    <span className="text-gray-600 dark:text-white">
                                         Or
-                                        <span className="text-indigo-600 mx-1">Browse</span>
+                                        <span className="text-indigo-600 dark:text-indigo-400 mx-1">
+                                            Browse
+                                        </span>
                                         your files.
                                     </span>
                                 </>
@@ -202,13 +213,16 @@ const MintForm = () => {
                 </div>
 
                 {/* right side form */}
-                <div className="flex flex-col h-full w-full gap-8 xs:max-w-[unset] md:max-w-[600px]">
+                <div className="flex flex-col h-full w-full gap-8 mb-6 xs:max-w-[unset] md:max-w-[600px]">
                     <div className="flex flex-col">
-                        <label className="flex items-center mb-3" htmlFor="name">
-                            Name *
+                        <label
+                            className="flex items-center font-bold mb-3 dark:text-white"
+                            htmlFor="name"
+                        >
+                            Name*
                         </label>
                         <input
-                            className="flex h-12 w-full items-center rounded-xl p-3 text-md border border-level-2 transition duration-200 hover:border-level-3 focus-within:shadow-none focus-within:hover:shadow-none focus-within:border-level-3"
+                            className="flex h-12 w-full items-center transition-all duration-300 rounded-xl p-3 text-md border border-level-2 outline-none dark:bg-d-primary dark:text-white"
                             placeholder="Name your NFT"
                             type="text"
                             id="name"
@@ -218,12 +232,15 @@ const MintForm = () => {
                         />
                     </div>
                     <div className="flex flex-col">
-                        <label className="flex flex-col mb-3" htmlFor="description">
-                            Description:
+                        <label
+                            className="flex flex-col font-bold mb-3 dark:text-white"
+                            htmlFor="description"
+                        >
+                            Description*:
                         </label>
                         <textarea
                             placeholder="Enter a description"
-                            className="h-auto w-full rounded-lg p-3 placeholder:text-secondary bg-transparent outline-none min-h-[26px] text-[16px] leading-[26px] sm:font-[inherit] sm:leading-[inherit] sm:text-[inherit] border border-level-2 transition duration-200 hover:border-level-3 focus-within:shadow-none focus-within:hover:shadow-none focus-within:border-level-3 no-scrollbar resize-none"
+                            className="h-auto w-full rounded-lg p-3 placeholder:text-secondary transition-all duration-300 dark:bg-d-primary outline-none min-h-[26px] text-[16px] leading-[26px] sm:font-[inherit] sm:leading-[inherit] sm:text-[inherit] border border-level-2 resize-none dark:text-white"
                             name="description"
                             id="description"
                             rows="4"
@@ -232,23 +249,28 @@ const MintForm = () => {
                         ></textarea>
                     </div>
                     <div className="flex flex-col">
-                        <label className="flex flex-col mb-3" htmlFor="collection">
-                            Collection *
+                        <label
+                            className="flex flex-col mb-3 font-bold dark:text-white"
+                            htmlFor="collection"
+                        >
+                            Collection*
                         </label>
                         <select
-                            className="p-4 bg-transparent hover:border-level-3 border border-level-2 rounded-lg cursor-pointer"
+                            className="p-4 bg-transparent hover:border-level-3 border transition-all duration-300 border-level-2 rounded-lg cursor-pointer dark:bg-d-primary dark:text-white"
                             name="collection"
                             id="collection"
                             value={formData.collection}
                             onChange={handleChange}
                         >
-                            <option value="">---------</option>
+                            <option className="dark:text-white text-xl" value="">
+                                ---------
+                            </option>
 
                             {collectionsNames.map((collection, idx) => (
                                 <option
                                     key={idx}
                                     name="option4"
-                                    className="text-xl"
+                                    className="text-xl dark:text-white"
                                     value={collection}
                                 >
                                     {collection}

@@ -1,6 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { rootReducer } from './rootReducer';
+import reducer from './reducer.js';
 
 export const store = configureStore({
-    reducer: rootReducer,
+    reducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(
+        // add custom middlewares here
+    )
 });
