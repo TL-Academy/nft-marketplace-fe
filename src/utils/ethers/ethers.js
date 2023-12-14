@@ -1,12 +1,15 @@
 import { ethers } from 'ethers';
-import { EventTypes, PROVIDER_ADDRESS, CONTRACT_ADDRESS, ETHERSCAN_API_KEY } from '../../constants/constants.js';
+import {
+    EventTypes,
+    PROVIDER_ADDRESS,
+    CONTRACT_ADDRESS,
+    ETHERSCAN_API_KEY,
+} from '../../constants/constants.js';
 import { addMintedNFT, setMintedNFTs } from '../../redux/collectionSlice.js';
 import { store } from '../../redux/store.js';
-import addresses from '../../contracts/addresses.json'
+import addresses from '../../contracts/addresses.json';
 
-export const provider = new ethers.providers.JsonRpcProvider(
-    PROVIDER_ADDRESS,
-);
+export const provider = new ethers.providers.JsonRpcProvider(PROVIDER_ADDRESS);
 
 const abi = await fetch(
     `https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address=${CONTRACT_ADDRESS}&apikey=${ETHERSCAN_API_KEY}}`,
@@ -17,31 +20,32 @@ const abi = await fetch(
 
 const contract = new ethers.Contract(CONTRACT_ADDRESS, abi, provider);
 export const getAllMintedNFTs = () => {
-
-    return async function(dispatch) {
+    return async function (dispatch) {
         try {
             const addressesKey = Object.keys(addresses)[0];
-            const fromBlock = addresses[addressesKey].NftCollections.BoringTokenNFT.fromBlock
-            
+            const fromBlock = addresses[addressesKey].NftCollections.BoringTokenNFT.fromBlock;
+
             const filter = contract.filters[EventTypes.MINTED]();
             const nfts = await contract.queryFilter(filter, fromBlock, 'latest');
 
             const mintedNFTsData = await Promise.all(
                 nfts.map(async (nft) => {
                     const res = await fetch(`https://ipfs.io/ipfs/${nft.args.tokenHash}`);
+                    const data = await res.json();
 
-                    return res.json();
+                    data.image = data.image.replace(/^ipfs:\/\//, '');
+
+                    return data;
                 }),
             );
 
             dispatch(setMintedNFTs(mintedNFTsData));
-
         } catch (error) {
             console.error("Error fetching Minted NFT's", error);
         }
-    }
+    };
 };
-store.dispatch(getAllMintedNFTs())
+store.dispatch(getAllMintedNFTs());
 
 const filter = contract.filters[EventTypes.MINTED]();
 contract.on(filter, async (from, to, value, event) => {
@@ -49,12 +53,12 @@ contract.on(filter, async (from, to, value, event) => {
         from: from,
         to: to,
         value: value,
-        data: event
+        data: event,
     };
 
     try {
         const response = await fetch(`https://ipfs.io/ipfs/${info.data}`);
-        
+
         if (response.ok) {
             const jsonData = await response.json();
             store.dispatch(addMintedNFT(jsonData));
