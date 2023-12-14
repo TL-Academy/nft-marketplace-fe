@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { selectNotifications, removeNotification, firstNotification } from '../../app/notification';
+import { selectNotifications, removeNotification, firstNotification } from '../../redux/notification';
 import { useEffect } from 'react';
 
 export default function Notifications() {
