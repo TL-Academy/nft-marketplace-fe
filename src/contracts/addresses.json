@@ -5,7 +5,8 @@
         },
         "NftCollections": {
             "BoringTokenNFT": {
-                "address": "0x613D5Ba9A1fC6a59CeF90aD0F6cbaf0D9F12ac3c"
+                "address": "0x613D5Ba9A1fC6a59CeF90aD0F6cbaf0D9F12ac3c",
+                "fromBlock" : 4795836
             }
         }
     }
