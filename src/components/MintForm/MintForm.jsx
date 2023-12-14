@@ -2,6 +2,12 @@ import { useState } from 'react';
 import classes from './MintForm.module.css';
 import pinJsonToIpfs from '../../services/pinJsontoIPFS';
 import pinFileToIpfs from '../../services/pinFileToIpfs';
+<<<<<<< Updated upstream
+=======
+
+import {useDispatch} from 'react-redux'
+import { addNotification } from '../../redux/notification';
+>>>>>>> Stashed changes
 import { mint } from '../../utils/mintNFT';
 import addresses from '../../contracts/addresses.json';
 
