@@ -19,11 +19,13 @@ const abi = await fetch(
     .catch((e) => console.error('Error getting the ABI from Etherscan: ', e));
 
 const contract = new ethers.Contract(CONTRACT_ADDRESS, abi, provider);
+
+const addressesKey = Object.keys(addresses)[0];
+const fromBlock = addresses[addressesKey].NftCollections.BoringTokenNFT.fromBlock;
+
 export const getAllMintedNFTs = () => {
     return async function (dispatch) {
         try {
-            const addressesKey = Object.keys(addresses)[0];
-            const fromBlock = addresses[addressesKey].NftCollections.BoringTokenNFT.fromBlock;
 
             const filter = contract.filters[EventTypes.MINTED]();
             const nfts = await contract.queryFilter(filter, fromBlock, 'latest');
@@ -34,7 +36,7 @@ export const getAllMintedNFTs = () => {
                     const data = await res.json();
 
                     data.image = data.image.replace(/^ipfs:\/\//, '');
-
+                    
                     return data;
                 }),
             );
@@ -46,6 +48,32 @@ export const getAllMintedNFTs = () => {
     };
 };
 store.dispatch(getAllMintedNFTs());
+
+export const getUserNfts = async () => {
+        try {
+            const filter = contract.filters[EventTypes.MINTED]();
+            const nfts = await contract.queryFilter(filter, fromBlock, 'latest');
+
+            console.log(nfts);
+            const userNfts = await Promise.all(
+                nfts.map(async (nft) => {
+                    //get userId from connectMetamask (look at NavBar component)
+                    if(nft.args[1] == userId){
+                        const res = await fetch(`https://ipfs.io/ipfs/${nft.args.tokenHash}`);
+                        const data = await res.json();
+
+                        data.image = data.image.replace(/^ipfs:\/\//, '');
+                    
+                        return data;
+                    }
+                })
+            )
+            //console.log(nft.args[1]);
+        } catch (error) {
+            console.error("Error fetching NFT's for current user", error)
+        }
+    }
+    getUserNfts()
 
 const filter = contract.filters[EventTypes.MINTED]();
 contract.on(filter, async (from, to, value, event) => {
