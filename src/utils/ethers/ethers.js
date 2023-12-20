@@ -34,6 +34,8 @@ export const getAllMintedNFTs = () => {
                     const data = await res.json();
 
                     data.image = data.image.replace(/^ipfs:\/\//, '');
+                    data.tokenId = parseInt(nft.args.tokenId, 16);
+                    data.contractAddress = nft.args.contractAddress;
 
                     return data;
                 }),

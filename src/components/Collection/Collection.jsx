@@ -11,7 +11,7 @@ const Collection = () => {
             <div className="h-[340px] flex flex-col justify-end">
                 <div className={`flex items-end sm:mb-6`}>
                     <div className={`flex flex-col`}>
-                        <div className="flex mb-4 ">
+                        <div className="flex mb-4 ">    
                             <img
                                 className="h-28 w-28"
                                 src="https://i.seadn.io/gae/Ju9CkWtV-1Okvf45wo8UctR-M9He2PjILP0oOvxE89AyiPPGtrR3gysu1Zgy0hjd2xKIgjJJtWIc0ybj4Vd7wv8t3pxDGHoJBzDB?auto=format&dpr=1&w=256"
@@ -80,7 +80,8 @@ const Collection = () => {
         cardImg={nft.image} 
         cardName={nft.name}  
         cardPrice={nft.cardPrice}  
-        lastSoldPrice={nft.lastSoldPrice} 
+        lastSoldPrice={nft.lastSoldPrice}
+        isCollectionPage={true} 
     />
 ))}
             </div>
