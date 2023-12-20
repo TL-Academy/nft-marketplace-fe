@@ -34,7 +34,6 @@ export const getAllMintedNFTs = () => {
                     const data = await res.json();
 
                     data.image = data.image.replace(/^ipfs:\/\//, '');
-                    console.log(data, 'here')
                     return data;
                 }),
             );
