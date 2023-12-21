@@ -7,6 +7,10 @@
             "BoringTokenNFT": {
                 "address": "0x613D5Ba9A1fC6a59CeF90aD0F6cbaf0D9F12ac3c",
                 "fromBlock" : 4795836
+            },
+            "BoringTokenNFTDarin": {
+                "address": "0x1279e68AE1e45eE675f532027A850F9Ea27c8147",
+                "fromBlock" : 4910733
             }
         }
     }
