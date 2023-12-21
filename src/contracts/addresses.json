@@ -6,7 +6,11 @@
         "NftCollections": {
             "BoringTokenNFT": {
                 "address": "0x613D5Ba9A1fC6a59CeF90aD0F6cbaf0D9F12ac3c",
-                "fromBlock" : 4795836
+                "fromBlock": 4795836
+            },
+            "ChavdarNft": {
+                "address": "0x29bF7713DB0E798aA2f7D4B2A11ad8e5D11ac966",
+                "fromBlock": 4912886
             },
             "BoringTokenNFTDarin": {
                 "address": "0x1279e68AE1e45eE675f532027A850F9Ea27c8147",
