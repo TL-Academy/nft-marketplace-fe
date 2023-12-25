@@ -36,7 +36,6 @@ export const getAllMintedNFTs = () => {
                     const data = await res.json();
 
                     data.image = data.image.replace(/^ipfs:\/\//, '');
-                    
                     return data;
                 }),
             );
@@ -45,7 +44,7 @@ export const getAllMintedNFTs = () => {
         } catch (error) {
             console.error("Error fetching Minted NFT's", error);
         }
-    };
+    }; 
 };
 store.dispatch(getAllMintedNFTs());
 
