@@ -1,7 +1,9 @@
+import { getAllMintedNFTs } from '../../utils/ethers/ethers';
 import NFTCard from '../NFTCard/NFTCard';
 import classes from './Collection.module.css';
 import { useSelector } from 'react-redux';
-import { getAllMintedNFTs } from '../../utils/ethers/ethers';
+import { store } from '../../redux/store.js';
+
 
 const Collection = () => {
     getAllMintedNFTs()

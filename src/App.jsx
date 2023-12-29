@@ -7,6 +7,7 @@ import Footer from './components/Footer/Footer.jsx';
 import Collection from './components/Collection/Collection.jsx';
 import useTheme from './hooks/useTheme.js';
 import Notifications from './components/Notification/Notfications.jsx';
+import Profile from './components/Profile/Profile.jsx';
 
 function App() {
     const { isDark } = useTheme();
@@ -20,6 +21,7 @@ function App() {
                     <Route path="/card-info" element={<NFTCard />} />
                     <Route path="/collections" element={<Collection />} />
                     <Route path="/home" element={<Collection />} />
+                    <Route path="/profile" element={<Profile />} />
                 </Routes>
             </main>
             <footer>
