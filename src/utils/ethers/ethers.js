@@ -20,58 +20,70 @@ const abi = await fetch(
     .then((res) => res.result)
     .catch((e) => console.error('Error getting the ABI from Etherscan: ', e));
 
-export const getAllMintedNFTs = () => {
-    return async function (dispatch) {
-        const contract = new ethers.Contract(CONTRACT_ADDRESS, abi, provider);
-        try {
-            const filter = contract.filters[EventTypes.MINTED]();
-            const nfts = await contract.queryFilter(filter, fromBlock, 'latest');
-
-            const mintedNFTsData = await Promise.all(
+    export const getAllMintedNFTs = () => {
+        return async function (dispatch) {
+          try {
+            const nftCollections = Object.entries(addresses['11155111']['NftCollections']);
+            let mintedNFTsData = {};
+      
+            for (const [collectionName, collectionData] of nftCollections) {
+              const contract = new ethers.Contract(collectionData.address, abi, provider);
+              const filter = contract.filters[EventTypes.MINTED]();
+              const nfts = await contract.queryFilter(filter, collectionData.fromBlock, 'latest');
+      
+              mintedNFTsData[collectionName] = await Promise.all(
                 nfts.map(async (nft) => {
-                    const res = await fetch(`https://ipfs.io/ipfs/${nft.args.tokenHash}`);
-                    const data = await res.json();
-
-                    data.image = data.image.replace(/^ipfs:\/\//, '');
-                    data.address = nft.address
-                    data.owner = nft.args.to
-
-                    return data
-                }),
-            );
-
+                  const res = await fetch(`https://ipfs.io/ipfs/${nft.args.tokenHash}`);
+                  const data = await res.json();
+      
+                  data.image = data.image.replace(/^ipfs:\/\//, '');
+                  data.collectionName = collectionName;
+                  data.address = nft.address;
+                  data.owner = nft.args.to;
+      
+                  return data;
+                })
+              );
+            }
+      
             dispatch(setMintedNFTs(mintedNFTsData));
-        } catch (error) {
-            console.error("Error fetching Minted NFT's", error);
-        }
-    }; 
-};
+          } catch (error) {
+            console.error("Error fetching all minted NFT's", error);
+          }
+        };
+      };
+      
+
 store.dispatch(getAllMintedNFTs());
 
 export const getUserNfts = (userId) => {
     return async function (dispatch) {
         try {
             const nftCollections = Object.entries(addresses['11155111']['NftCollections']);
-            let userNftData = [];
+            let userNftData = {};
 
             for (const [collectionName, collectionData] of nftCollections) {
                 const contract = new ethers.Contract(collectionData.address, abi, provider);
                 const filter = contract.filters[EventTypes.MINTED]();
                 const nfts = await contract.queryFilter(filter, collectionData.fromBlock, 'latest');
-
-                await Promise.all(
+                
+                    await Promise.all(
                     nfts.map(async (nft) => {
                         if ((nft.args.to).toLowerCase() == userId) {
+                            userNftData[collectionName] = [];
+
                             const res = await fetch(`https://ipfs.io/ipfs/${nft.args.tokenHash}`);
                             const data = await res.json();
                             data.image = data.image.replace(/^ipfs:\/\//, '');
                             data.address = nft.address
                             data.owner = nft.args.to
-
-                            userNftData.push(data);
+                            
+                            userNftData[collectionName].push(data);
                         }
                     })
+                    
                 );
+                
             }
             dispatch(setUserNfts(userNftData));
 
@@ -107,4 +119,4 @@ const updateNfts = async () => {
     }
 });
 }
-
+updateNfts()

@@ -6,7 +6,8 @@ import Collection from "../Collection/Collection";
 const Profile = () => {
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.wallet.walletAddress);
-
+  const userCollections = useSelector((state) => state.userNfts.userNfts)
+  
   useEffect(() => {
     if (userId) {
       dispatch(getUserNfts(userId));
@@ -15,7 +16,9 @@ const Profile = () => {
 
   return (
     <div>
-      <Collection />
+      {Object.entries(userCollections).map(([collectionName, nftsData]) => (
+        <Collection key={collectionName} collectionName={collectionName} nftsData={nftsData}/>
+      ))}  
     </div>
   );
 };
