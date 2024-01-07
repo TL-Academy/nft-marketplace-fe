@@ -1,11 +1,7 @@
 import NFTCard from '../NFTCard/NFTCard';
 import classes from './Collection.module.css';
-import { useSelector } from 'react-redux';
-import { getAllMintedNFTs } from '../../utils/ethers/ethers';
 
-const Collection = () => {
-    getAllMintedNFTs()
-    const mintedNFTs = useSelector((state) => state.nfts.mintedNFTs)
+const Collection = ({ nftsData, collectionName }) => {
     return (
         <div className="flex flex-col h-full bg-white dark:bg-d-primary transition-all duration-300">
             <div className="h-[340px] flex flex-col justify-end">
@@ -19,7 +15,7 @@ const Collection = () => {
                         </div>
                         <div className="flex items-start">
                             <h1 className="font-semibold text-2xl dark:text-white">
-                                Some Text Heading
+                                {collectionName}
                             </h1>
                         </div>
                     </div>
@@ -74,7 +70,7 @@ const Collection = () => {
             </div>
             <hr className="mt-1 mb-4" />
             <div className="flex flex-wrap -mx-4">
-            {Object.values(mintedNFTs).map((nft, index) => (
+            {Object.values(nftsData).map((nft, index) => (
     <NFTCard
         key={index}
         cardImg={nft.image} 
@@ -83,6 +79,7 @@ const Collection = () => {
         lastSoldPrice={nft.lastSoldPrice} 
     />
 ))}
+
             </div>
         </div>
     );
