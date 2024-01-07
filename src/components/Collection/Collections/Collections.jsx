@@ -6,20 +6,7 @@ const Collections = () => {
     getAllMintedNFTs()
 
     const collections = useSelector((state) => state.nfts.mintedNFTs)
-    const nftsByCollection = {};
-    
-//     mintedNFTs.forEach((nft) => {
-//     const { collectionName, ...nftData } = nft;
 
-//     if (!nftsByCollection[collectionName]) {
-//         nftsByCollection[collectionName] = [nftData];
-//     } else {
-//         nftsByCollection[collectionName].push(nftData);
-//     }
-// });
-
-// // Now nftsByCollection contains your data organized by collectionName
-// console.log(nftsByCollection);
     return (
         <div>
             {Object.entries(collections).map(([collectionName, nftsData]) => (

@@ -1,12 +1,7 @@
-import { getAllMintedNFTs } from '../../utils/ethers/ethers';
 import NFTCard from '../NFTCard/NFTCard';
 import classes from './Collection.module.css';
-import { useSelector } from 'react-redux';
 
 const Collection = ({ nftsData, collectionName }) => {
-    getAllMintedNFTs()
-    
-    const mintedNFTs = useSelector((state) => state.nfts.mintedNFTs)
     return (
         <div className="flex flex-col h-full bg-white dark:bg-d-primary transition-all duration-300">
             <div className="h-[340px] flex flex-col justify-end">
