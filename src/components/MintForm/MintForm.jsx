@@ -36,7 +36,7 @@ const MintForm = () => {
 
         const handleConnectionBetweenBeToFe = async (subject, message, ipfsHash) => {
             try {
-                const response = await fetch('http://localhost:8000/send-email/', {
+                const response = await fetch('http://localhost:7000/send-email/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
