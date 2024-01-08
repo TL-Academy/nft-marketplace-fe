@@ -4,9 +4,10 @@ import NavBar from './components/NavBar/NavBar';
 import NFTCard from './components/NFTCard/NFTCard';
 import { Route, Routes } from 'react-router-dom';
 import Footer from './components/Footer/Footer.jsx';
-import Collection from './components/Collection/Collection.jsx';
 import useTheme from './hooks/useTheme.js';
 import Notifications from './components/Notification/Notfications.jsx';
+import Profile from './components/Profile/Profile.jsx';
+import Collections from './components/Collection/Collections/Collections.jsx';
 
 function App() {
     const { isDark } = useTheme();
@@ -18,8 +19,9 @@ function App() {
                 <Routes>
                     <Route path="/create" element={<MintForm />} />
                     <Route path="/card-info" element={<NFTCard />} />
-                    <Route path="/collections" element={<Collection />} />
-                    <Route path="/home" element={<Collection />} />
+                    <Route path="/collections" element={<Collections />} />
+                    <Route path="/home" element={<Collections />} />
+                    <Route path="/profile" element={<Profile />} />
                 </Routes>
             </main>
             <footer>

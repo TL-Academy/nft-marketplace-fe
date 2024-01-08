@@ -1,15 +1,23 @@
 import { useState } from 'react';
+import { selectAddress } from '../walletReducer';
+import { useSelector } from 'react-redux';
 
-const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice, isCollectionPage }) => {
+import { useWallets } from "@web3-onboard/react"
+import { ethers } from 'ethers';
+
+const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice, owner }) => {
     const [isHovered, setIsHovered] = useState(false);
+    const address = useSelector(selectAddress);
+
+    const connectedWallets = useWallets();
+
 
     const priceFormat = (price) => {
         const formatted = Number(price).toFixed(2);
         return `${formatted} ETH`;
     };
 
-
-    function collectionPage() {
+    function buyButton() {
         return (
             <div className="p-0 pt-1">
                 <button className="w-3/4 py-1 font-bold text-slate-200 bg-blue-700 border-r-2">
@@ -26,13 +34,17 @@ const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice, isCollectionPage
         )
     }
 
-    function profilePage() {
+    function approveButton() {
         return (
             <div className="p-0 pt-1 w-full">
                 <button 
                     className="w-full py-1 font-bold text-slate-200 bg-blue-700 border-r-2"
                     onClick={()=>{
-                        
+                        const injectedProvider = connectedWallets[0].provider;
+                        const provider = new ethers.providers.Web3Provider(injectedProvider);
+                        const signer = provider.getSigner();
+                        const contract = new ethers.Contract(ADDRESS, ABI, signer);
+                        contract.getApproved(0);
                     }}
                 >
                     Approve
@@ -69,7 +81,7 @@ const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice, isCollectionPage
                     Last sale: {priceFormat(lastSoldPrice)}
                 </p>
                 {isHovered && (
-                    isCollectionPage ? collectionPage() : profilePage()
+                    !(address !== owner) ? buyButton() : approveButton()
                 )}
             </div>
         </div>
