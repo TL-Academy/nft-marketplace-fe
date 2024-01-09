@@ -2,7 +2,7 @@ import { useState } from 'react';
 import classes from './MintForm.module.css';
 import pinJsonToIpfs from '../../services/pinJsontoIPFS';
 import pinFileToIpfs from '../../services/pinFileToIpfs';
-import {useDispatch} from 'react-redux'
+import { useDispatch } from 'react-redux';
 import { addNotification } from '../../redux/notification';
 import { mint } from '../../utils/mintNFT';
 import addresses from '../../contracts/addresses.json';
@@ -43,6 +43,7 @@ const MintForm = () => {
         e.target.value = '';
     };
 
+    // @audit - extract into different file
     const handleConnectionBetweenBeToFe = async (subject, message, ipfsHash) => {
         try {
             const response = await fetch('http://localhost:8000/send-email/', {
@@ -62,28 +63,30 @@ const MintForm = () => {
             } else {
                 console.error('Error sending email:', response.status);
             }
-        } catch
-        (error) {
+        } catch (error) {
             console.error('Error:', error);
         }
     };
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        dispatch(addNotification({message: 'Minting NFT', status: 'in-progress'})) 
-        
+        dispatch(addNotification({ message: 'Minting NFT', status: 'in-progress' }));
+
         const ipfsHash = await pinFileToIpfs(file);
-        
+
         if (ipfsHash) {
-            await pinJsonToIpfs(formData.name, formData.description, ipfsHash);
-            dispatch(addNotification({message: 'Minting NFT', status: 'success'})) 
-            console.log(ipfsHash)
+            const data = await pinJsonToIpfs(formData.name, formData.description, ipfsHash);
+            const tokenHash = data['IpfsHash'];
+            const contractAddress = collections[formData.collection].address;
+            mint(tokenHash, contractAddress);
+            dispatch(addNotification({ message: 'Minting NFT', status: 'success' }));
+            console.log(ipfsHash);
         } else {
-            dispatch(addNotification({message: 'Minting NFT', status: 'error'})) 
+            dispatch(addNotification({ message: 'Minting NFT', status: 'error' }));
         }
-        
+
+        // @audit send mail await sendMail()
         // await handleConnectionBetweenBeToFe();
 
         setFormData(initialValues);

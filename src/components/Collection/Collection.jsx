@@ -1,6 +1,7 @@
 import NFTCard from '../NFTCard/NFTCard';
 import classes from './Collection.module.css';
 
+// @audit- map data ["title1", "title2", "title3", "title4", "title5]
 const Collection = ({ nftsData, collectionName }) => {
     return (
         <div className="flex flex-col h-full bg-white dark:bg-d-primary transition-all duration-300">
@@ -70,16 +71,15 @@ const Collection = ({ nftsData, collectionName }) => {
             </div>
             <hr className="mt-1 mb-4" />
             <div className="flex flex-wrap -mx-4">
-            {Object.values(nftsData).map((nft, index) => (
-    <NFTCard
-        key={index}
-        cardImg={nft.image} 
-        cardName={nft.name}  
-        cardPrice={nft.cardPrice}  
-        lastSoldPrice={nft.lastSoldPrice} 
-    />
-))}
-
+                {Object.values(nftsData).map((nft, index) => (
+                    <NFTCard
+                        key={index}
+                        cardImg={nft?.image}
+                        cardName={nft.name}
+                        cardPrice={nft.cardPrice}
+                        lastSoldPrice={nft.lastSoldPrice}
+                    />
+                ))}
             </div>
         </div>
     );
