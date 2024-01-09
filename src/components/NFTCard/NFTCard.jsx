@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { useWallets } from "@web3-onboard/react"
 import { ethers } from 'ethers';
 
-const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice, owner }) => {
+const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice, owner, contractAddress }) => {
     const [isHovered, setIsHovered] = useState(false);
     const address = useSelector(selectAddress);
 
@@ -39,12 +39,23 @@ const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice, owner }) => {
             <div className="p-0 pt-1 w-full">
                 <button 
                     className="w-full py-1 font-bold text-slate-200 bg-blue-700 border-r-2"
-                    onClick={()=>{
+                    onClick={async ()=>{
                         const injectedProvider = connectedWallets[0].provider;
                         const provider = new ethers.providers.Web3Provider(injectedProvider);
                         const signer = provider.getSigner();
-                        const contract = new ethers.Contract(ADDRESS, ABI, signer);
-                        contract.getApproved(0);
+                        const abi = await fetch(`https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address=${contractAddress}`,)
+                            .then((res) => res.json())
+                            .then((res) => res.result)
+                            .catch((e) => console.error('Error getting the ABI from Etherscan: ', e));
+                        const contract = new ethers.Contract(contractAddress, abi, signer);
+                        for (let i=0; i<100; i++) {
+                            try {
+                                const approved = await contract.getApproved(i);
+                                console.log('Approved Address:', approved);
+                            } catch (error) {
+                                console.error('oops');
+                            }
+                        }
                     }}
                 >
                     Approve

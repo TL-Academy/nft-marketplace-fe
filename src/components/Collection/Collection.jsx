@@ -78,6 +78,7 @@ const Collection = ({ nftsData, collectionName }) => {
         cardPrice={nft.cardPrice}  
         lastSoldPrice={nft.lastSoldPrice}
         owner={nft.owner}
+        contractAddress={nft.address}
     />
 ))}
 
