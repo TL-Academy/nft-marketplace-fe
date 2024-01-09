@@ -3,7 +3,10 @@ const VITE_WALLET_PRIVATE_KEY = import.meta.env.VITE_WALLET_PRIVATE_KEY;
 const VITE_RPC_PROVIDER = import.meta.env.VITE_RPC_PROVIDER;
 
 export const mint = async (tokenHash, contractAddr) => {
+    // @audit - browserProvider(window.ethereum)
     const provider = new ethers.providers.JsonRpcProvider(VITE_RPC_PROVIDER);
+
+    // @audit remove private key
     const wallet = new ethers.Wallet(VITE_WALLET_PRIVATE_KEY, provider);
 
     const abi = await fetch(
