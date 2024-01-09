@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { selectAddress } from '../walletReducer';
 import { useSelector } from 'react-redux';
-
 import { useWallets } from "@web3-onboard/react"
 import { ethers } from 'ethers';
+import addresses from '../../contracts/addresses.json';
 
-const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice, owner, contractAddress }) => {
+
+const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice, owner, contractAddress, cardId }) => {
     const [isHovered, setIsHovered] = useState(false);
+    const [approveButtonText, setApproveButtonText] = useState("Approve")
+
     const address = useSelector(selectAddress);
-
     const connectedWallets = useWallets();
-
+    const marketplaceAddress = addresses['11155111']['Marketplace']['address']
 
     const priceFormat = (price) => {
         const formatted = Number(price).toFixed(2);
@@ -37,9 +39,9 @@ const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice, owner, contractA
     function approveButton() {
         return (
             <div className="p-0 pt-1 w-full">
-                <button 
+                <button
                     className="w-full py-1 font-bold text-slate-200 bg-blue-700 border-r-2"
-                    onClick={async ()=>{
+                    onClick={async () => {
                         const injectedProvider = connectedWallets[0].provider;
                         const provider = new ethers.providers.Web3Provider(injectedProvider);
                         const signer = provider.getSigner();
@@ -48,17 +50,22 @@ const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice, owner, contractA
                             .then((res) => res.result)
                             .catch((e) => console.error('Error getting the ABI from Etherscan: ', e));
                         const contract = new ethers.Contract(contractAddress, abi, signer);
-                        for (let i=0; i<100; i++) {
-                            try {
-                                const approved = await contract.getApproved(i);
-                                console.log('Approved Address:', approved);
-                            } catch (error) {
-                                console.error('oops');
+                        try {
+                            const approved = await contract.getApproved(i);
+                            if (approved === marketplaceAddress) {
+                                setApproveButtonText("Approved")
+                            } else {
+                                await contract.approve(marketplaceAddress, cardId)
+                                    .then(setApproveButtonText("Approved"))
+                                    .catch(e => console.log(e))
                             }
+                        } catch (error) {
+                            console.error("Error approving", error);
                         }
-                    }}
+                    }
+                    }
                 >
-                    Approve
+                    {approveButtonText}
                 </button>
             </div>
         )
@@ -92,7 +99,7 @@ const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice, owner, contractA
                     Last sale: {priceFormat(lastSoldPrice)}
                 </p>
                 {isHovered && (
-                    !(address !== owner) ? buyButton() : approveButton()
+                    address !== owner ? buyButton() : approveButton()
                 )}
             </div>
         </div>

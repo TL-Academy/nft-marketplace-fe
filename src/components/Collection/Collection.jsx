@@ -79,6 +79,7 @@ const Collection = ({ nftsData, collectionName }) => {
         lastSoldPrice={nft.lastSoldPrice}
         owner={nft.owner}
         contractAddress={nft.address}
+        cardId={0} // card id should be added to redux
     />
 ))}
 
