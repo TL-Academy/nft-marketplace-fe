@@ -1,4 +1,4 @@
-const handleConnectionBetweenBeToFe = async (subject, message, ipfsHash) => {
+const sendEmail = async (subject, message, ipfsHash) => {
     try {
         const response = await fetch('http://localhost:8000/send-email/', {
             method: 'POST',
@@ -21,4 +21,4 @@ const handleConnectionBetweenBeToFe = async (subject, message, ipfsHash) => {
         console.error('Error:', error);
     }
 };
-export default handleConnectionBetweenBeToFe;
+export default sendEmail;

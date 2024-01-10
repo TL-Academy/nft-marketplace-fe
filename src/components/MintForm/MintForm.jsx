@@ -9,7 +9,7 @@ import addresses from '../../contracts/addresses.json';
 import isFormValid from '../../validators/mintFormValidators';
 import { useSelector } from 'react-redux';
 import ConnectMetamask from '../ConnectMetamask';
-import handleConnectionBetweenBeToFe from '../../services/connectToServer';
+import sendEmail from '../../services/sendEmail';
 
 const collections = addresses['11155111']['NftCollections'];
 
@@ -51,7 +51,7 @@ const MintForm = () => {
     };
 
     // TODO: Fix when backend is finished
-    // handleConnectionBetweenBeToFe()
+    // sendEmail()
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -71,18 +71,9 @@ const MintForm = () => {
                     status: 'Missing extension',
                 }),
             );
-            // Not optimal - need help implementing delay before redirecting to install metamask
-            // setTimeout(() => {
-            //     window.open('https://metamask.io/download/', '_blank');
-            //     setFormData(initialValues);
-            //     setSelectedImage(null);
-            //     setFile(null);
-            // }, 3000);
-            window.open('https://metamask.io/download/', '_blank');
             setFormData(initialValues);
             setSelectedImage(null);
             setFile(null);
-
             return;
         }
 
