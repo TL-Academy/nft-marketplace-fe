@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { addNotification } from '../../redux/notification';
 import { mint } from '../../utils/mintNFT';
 import addresses from '../../contracts/addresses.json';
+import isFormValid from '../../validators/mintFormValidators';
 
 const collections = addresses['11155111']['NftCollections'];
 
@@ -70,6 +71,23 @@ const MintForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        // This is needed for form validation
+        const formFields = [
+            { name: 'Name', value: formData.name },
+            { name: 'Description', value: formData.description },
+            { name: 'Collection', value: formData.collection },
+            { name: 'Image', value: file },
+        ];
+        const validFields = isFormValid(formFields);
+        if (validFields.isValid === false) {
+            dispatch(
+                addNotification({
+                    message: `Please fill in ${validFields.field}`,
+                    status: 'error',
+                }),
+            );
+            return;
+        }
 
         dispatch(addNotification({ message: 'Minting NFT', status: 'in-progress' }));
 
