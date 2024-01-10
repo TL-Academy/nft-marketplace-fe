@@ -7,6 +7,9 @@ import { addNotification } from '../../redux/notification';
 import { mint } from '../../utils/mintNFT';
 import addresses from '../../contracts/addresses.json';
 import isFormValid from '../../validators/mintFormValidators';
+import { useSelector } from 'react-redux';
+import ConnectMetamask from '../ConnectMetamask';
+import handleConnectionBetweenBeToFe from '../../services/connectToServer';
 
 const collections = addresses['11155111']['NftCollections'];
 
@@ -23,6 +26,9 @@ const MintForm = () => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [file, setFile] = useState(null);
     const [isHovered, setIsHovered] = useState(false);
+
+    const walletAddr = useSelector((state) => state.wallet.walletAddress);
+    const { connectMetamask } = ConnectMetamask();
 
     const handleChange = (e) => {
         setFormData((oldState) => ({
@@ -44,30 +50,8 @@ const MintForm = () => {
         e.target.value = '';
     };
 
-    // @audit - extract into different file
-    const handleConnectionBetweenBeToFe = async (subject, message, ipfsHash) => {
-        try {
-            const response = await fetch('http://localhost:8000/send-email/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    subject,
-                    message,
-                    ipfsHash,
-                }),
-            });
-
-            if (response.ok) {
-                console.log('Email sent successfully!');
-            } else {
-                console.error('Error sending email:', response.status);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
+    // TODO: Fix when backend is finished
+    // handleConnectionBetweenBeToFe()
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -78,14 +62,56 @@ const MintForm = () => {
             { name: 'Collection', value: formData.collection },
             { name: 'Image', value: file },
         ];
-        const validFields = isFormValid(formFields);
-        if (validFields.isValid === false) {
+        const validatedFields = isFormValid(formFields);
+
+        if (!window.etherum) {
             dispatch(
                 addNotification({
-                    message: `Please fill in ${validFields.field}`,
-                    status: 'error',
+                    message: 'Could not detect installed metamask',
+                    status: 'Missing extension',
                 }),
             );
+            // Not optimal - need help implementing delay before redirecting to install metamask
+            // setTimeout(() => {
+            //     window.open('https://metamask.io/download/', '_blank');
+            //     setFormData(initialValues);
+            //     setSelectedImage(null);
+            //     setFile(null);
+            // }, 3000);
+            window.open('https://metamask.io/download/', '_blank');
+            setFormData(initialValues);
+            setSelectedImage(null);
+            setFile(null);
+
+            return;
+        }
+
+        if (!walletAddr) {
+            dispatch(
+                addNotification({
+                    message: 'You are not logged in',
+                    status: 'Authentication error',
+                }),
+            );
+            setFormData(initialValues);
+            setSelectedImage(null);
+            setFile(null);
+            try {
+                connectMetamask();
+            } catch (e) {
+                console.error('Could not connect to metamask', e);
+            }
+            return;
+        }
+
+        if (validatedFields.isValid === false) {
+            dispatch(
+                addNotification({
+                    message: `Please fill in ${validatedFields.field}`,
+                    status: 'Error',
+                }),
+            );
+
             return;
         }
 
@@ -99,7 +125,6 @@ const MintForm = () => {
             const contractAddress = collections[formData.collection].address;
             mint(tokenHash, contractAddress);
             dispatch(addNotification({ message: 'Minting NFT', status: 'success' }));
-            console.log(ipfsHash);
         } else {
             dispatch(addNotification({ message: 'Minting NFT', status: 'error' }));
         }
