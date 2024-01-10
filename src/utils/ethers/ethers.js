@@ -41,7 +41,6 @@ export const getAllMintedNFTs = () => {
                             return;
                         }
                         const data = await res.json();
-                        console.log(nft);
                         // @audit validate data
                         data.image = data.image.replace(/^ipfs:\/\//, '');
                         data.collectionName = collectionName;

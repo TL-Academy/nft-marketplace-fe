@@ -1,22 +1,13 @@
 import { ethers } from 'ethers';
-const VITE_WALLET_PRIVATE_KEY = import.meta.env.VITE_WALLET_PRIVATE_KEY;
-const VITE_RPC_PROVIDER = import.meta.env.VITE_RPC_PROVIDER;
+import getAbi from './getAbi';
 
 export const mint = async (tokenHash, contractAddr) => {
     // @audit - browserProvider(window.ethereum)
-    const provider = new ethers.providers.JsonRpcProvider(VITE_RPC_PROVIDER);
 
-    // @audit remove private key
-    const wallet = new ethers.Wallet(VITE_WALLET_PRIVATE_KEY, provider);
+    const provider = new ethers.providers.Web3Provider(window?.ethereum);
+    const abi = await getAbi(contractAddr);
 
-    const abi = await fetch(
-        `https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address=${contractAddr}`,
-    )
-        .then((res) => res.json())
-        .then((res) => res.result)
-        .catch((e) => console.error('Error getting the ABI from Etherscan: ', e));
-
-    const contract = new ethers.Contract(contractAddr, abi, wallet);
+    const contract = new ethers.Contract(contractAddr, abi, provider.getSigner());
 
     try {
         const transaction = await contract.mint(tokenHash);
