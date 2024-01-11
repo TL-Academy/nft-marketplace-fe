@@ -82,9 +82,7 @@ export const getUserNfts = (userId) => {
     };
 };
 
-// @audit
-// if we have an event listener for mint we should update the state un the event handler function
-// if we don't  update the state in the mint submit function
+
 export const updateNfts = async (contractAddress, owner, collectionName) => {
     const abi = await getAbiResult(contractAddress)
     const contract = new ethers.Contract(contractAddress, abi, provider);
@@ -118,5 +116,4 @@ export const updateNfts = async (contractAddress, owner, collectionName) => {
         }
     });
 };
-// @audit - remove
-// updateNfts();
+
