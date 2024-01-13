@@ -5,24 +5,12 @@ import { setUserNfts } from '../../redux/profileNfts.js';
 import {
     EventTypes,
     PROVIDER_ADDRESS,
-    CONTRACT_ADDRESS,
-    ETHERSCAN_API_KEY,
 } from '../../constants/constants.js';
 import addresses from '../../contracts/addresses.json';
-
-// @audit - not used - remove (check old version of the code to see if it was used)
-// const addressesKey = Object.keys(addresses)[0];
-// const fromBlock = addresses[addressesKey].NftCollections.BoringTokenNFT.fromBlock;
+import getAbiResult from './getAbiResult.js';
 
 export const provider = new ethers.providers.JsonRpcProvider(PROVIDER_ADDRESS);
-const abi = await fetch(
-    `https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address=${CONTRACT_ADDRESS}&apikey=${ETHERSCAN_API_KEY}}`,
-)
-    .then((res) => res.json())
-    .then((res) => res.result)
-    .catch((e) => console.error('Error getting the ABI from Etherscan: ', e));
 
-// @audit check this
 export const getAllMintedNFTs = () => {
     return async function (dispatch) {
         try {
@@ -30,6 +18,7 @@ export const getAllMintedNFTs = () => {
             let mintedNFTsData = {};
 
             for (const [collectionName, collectionData] of nftCollections) {
+                const abi = await getAbiResult(collectionData.address)
                 const contract = new ethers.Contract(collectionData.address, abi, provider);
                 const filter = contract.filters[EventTypes.MINTED]();
                 const nfts = await contract.queryFilter(filter, collectionData.fromBlock, 'latest');
@@ -43,7 +32,6 @@ export const getAllMintedNFTs = () => {
                         const data = await res.json();
                         // @audit validate data
                         data.image = data.image.replace(/^ipfs:\/\//, '');
-                        data.collectionName = collectionName;
                         data.address = nft.address;
                         data.owner = nft.args.to;
 
@@ -59,9 +47,6 @@ export const getAllMintedNFTs = () => {
     };
 };
 
-// @audit - remove
-store.dispatch(getAllMintedNFTs());
-
 export const getUserNfts = (userId) => {
     return async function (dispatch) {
         try {
@@ -69,6 +54,7 @@ export const getUserNfts = (userId) => {
             let userNftData = {};
 
             for (const [collectionName, collectionData] of nftCollections) {
+                const abi = await getAbiResult(collectionData.address)
                 const contract = new ethers.Contract(collectionData.address, abi, provider);
                 const filter = contract.filters[EventTypes.MINTED]();
                 const nfts = await contract.queryFilter(filter, collectionData.fromBlock, 'latest');
@@ -96,11 +82,10 @@ export const getUserNfts = (userId) => {
     };
 };
 
-// @audit
-// if we have an event listener for mint we should update the state un the event handler function
-// if we don't  update the state in the mint submit function
-const updateNfts = async () => {
-    const contract = new ethers.Contract(CONTRACT_ADDRESS, abi, provider);
+
+export const updateNfts = async (contractAddress, owner, collectionName) => {
+    const abi = await getAbiResult(contractAddress)
+    const contract = new ethers.Contract(contractAddress, abi, provider);
     const filter = contract.filters[EventTypes.MINTED]();
 
     contract.on(filter, async (from, to, value, event) => {
@@ -115,7 +100,10 @@ const updateNfts = async () => {
 
             if (response.ok) {
                 const jsonData = await response.json();
-                store.dispatch(addMintedNFT(jsonData));
+                jsonData.image = jsonData.image.replace(/^ipfs:\/\//, '')
+                jsonData.address = contractAddress
+                jsonData.owner = owner
+                store.dispatch(addMintedNFT({ collectionName, nftData: jsonData }));
             } else {
                 console.error(
                     'Failed to fetch data from IPFS:',
@@ -128,5 +116,4 @@ const updateNfts = async () => {
         }
     });
 };
-// @audit - remove
-// updateNfts();
+

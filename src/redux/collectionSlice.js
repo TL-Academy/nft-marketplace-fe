@@ -17,7 +17,9 @@ const nftsSlice = createSlice({
             state.mintedNFTs = action.payload;
         },
         addMintedNFT: (state, action) => {
-            state.mintedNFTs.push(action.payload);
+            const { collectionName, nftData } = action.payload
+
+            state.mintedNFTs[collectionName].push(nftData);        
         },
     },
 });

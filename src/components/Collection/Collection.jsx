@@ -1,5 +1,7 @@
 import NFTCard from '../NFTCard/NFTCard';
 import classes from './Collection.module.css';
+import Title from './Title.jsx'
+import { dummyData } from './dummyData.js';
 
 // @audit- map data ["title1", "title2", "title3", "title4", "title5]
 const Collection = ({ nftsData, collectionName }) => {
@@ -21,38 +23,10 @@ const Collection = ({ nftsData, collectionName }) => {
                         </div>
                     </div>
                     <div
-                        className={`ml-auto justify-end space-x-8 sm:text-lg ${classes.responsiveDesktop}`}
-                    >
-                        <div className="flex flex-col">
-                            <span className="font-bold text-base dark:text-white">---- ETH</span>
-                            <span className="text-slate-600 text-base font-semibold dark:text-white">
-                                Total volume
-                            </span>
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="font-bold text-base dark:text-white">---- ETH</span>
-                            <span className="text-slate-600 text-base font-semibold dark:text-white">
-                                Floor price
-                            </span>
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="font-bold text-base dark:text-white">---- WETH</span>
-                            <span className="text-slate-600 text-base font-semibold dark:text-white">
-                                Best offer
-                            </span>
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="font-bold text-base dark:text-white">-%</span>
-                            <span className="text-slate-600 text-base font-semibold dark:text-white">
-                                Listed
-                            </span>
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="font-bold text-base dark:text-white">----</span>
-                            <span className="text-slate-600 text-base font-semibold dark:text-white">
-                                Owners
-                            </span>
-                        </div>
+                        className={`ml-auto justify-end space-x-8 sm:text-lg ${classes.responsiveDesktop}`}>
+                        {Object.values(dummyData).map((data, index) => (
+                            <Title key={index} text={data.text} data={data.content}/>
+                        ))}
                     </div>
                     <hr className="mt-3" />
                 </div>

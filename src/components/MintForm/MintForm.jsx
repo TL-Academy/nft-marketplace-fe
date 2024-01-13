@@ -63,8 +63,7 @@ const MintForm = () => {
             { name: 'Image', value: file },
         ];
         const validatedFields = isFormValid(formFields);
-
-        if (!window.etherum) {
+        if (!window.ethereum) {
             dispatch(
                 addNotification({
                     message: 'Could not detect installed metamask',

@@ -1,10 +1,13 @@
 import { getAllMintedNFTs } from "../../../utils/ethers/ethers"
 import { useSelector } from "react-redux"
+import { store } from "../../../redux/store"
 import Collection from "../Collection"
+import { useEffect } from "react"
 
 const Collections = () => {
-    getAllMintedNFTs()
-
+    useEffect(() => {
+        store.dispatch(getAllMintedNFTs());
+    },[])
     const collections = useSelector((state) => state.nfts.mintedNFTs)
 
     return (
