@@ -1,6 +1,7 @@
+import listNft from '../../services/listNft.js';
 import NFTCard from '../NFTCard/NFTCard';
 import classes from './Collection.module.css';
-import Title from './Title.jsx'
+import Title from './Title.jsx';
 import { dummyData } from './dummyData.js';
 
 // @audit- map data ["title1", "title2", "title3", "title4", "title5]
@@ -23,9 +24,10 @@ const Collection = ({ nftsData, collectionName }) => {
                         </div>
                     </div>
                     <div
-                        className={`ml-auto justify-end space-x-8 sm:text-lg ${classes.responsiveDesktop}`}>
+                        className={`ml-auto justify-end space-x-8 sm:text-lg ${classes.responsiveDesktop}`}
+                    >
                         {Object.values(dummyData).map((data, index) => (
-                            <Title key={index} text={data.text} data={data.content}/>
+                            <Title key={index} text={data.text} data={data.content} />
                         ))}
                     </div>
                     <hr className="mt-3" />
@@ -52,6 +54,10 @@ const Collection = ({ nftsData, collectionName }) => {
                         cardName={nft.name}
                         cardPrice={nft.cardPrice}
                         lastSoldPrice={nft.lastSoldPrice}
+                        btnText="List NFT"
+                        onClickHandler={listNft}
+                        tokenId={nft.tokenId}
+                        address={nft.address}
                     />
                 ))}
             </div>
