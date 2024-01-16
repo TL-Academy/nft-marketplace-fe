@@ -1,11 +1,23 @@
 import { useState } from 'react';
+import priceFormat from '../../utils/priceFormat';
+import Modal from '../Modal/Modal';
+import PriceForm from '../NFTPriceForm/PriceForm';
 
-const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice }) => {
+const NFTCard = ({
+    cardImg,
+    cardName,
+    cardPrice,
+    lastSoldPrice,
+    btnText,
+    onClickHandler,
+    tokenId,
+    address,
+}) => {
     const [isHovered, setIsHovered] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
-    const priceFormat = (price) => {
-        const formatted = Number(price).toFixed(2);
-        return `${formatted} ETH`;
+    const toggleModal = () => {
+        setShowModal(!showModal);
     };
 
     return (
@@ -39,17 +51,38 @@ const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice }) => {
                 </p>
                 {isHovered && (
                     <div className="p-0 pt-1">
-                        <button className="w-3/4 py-1 font-bold text-slate-200 bg-blue-700 border-r-2">
-                            Buy now
+                        <button
+                            onClick={() => {
+                                toggleModal();
+                            }}
+                            className={`${
+                                btnText === 'Buy' ? 'w-3/4' : 'w-full'
+                            } py-1 font-bold text-slate-200 bg-blue-700 ${
+                                btnText === 'Buy' ? 'border-r-2' : ''
+                            }`}
+                        >
+                            {btnText}
                         </button>
-
-                        <button className="w-1/4 py-1 bg-blue-700">
-                            <i
-                                className="fa-solid fa-cart-shopping"
-                                style={{ color: '#f5f5f5' }}
-                            ></i>
-                        </button>
+                        {btnText === 'Buy' && (
+                            <button className="w-1/4 py-1 bg-blue-700">
+                                <i
+                                    className="fa-solid fa-cart-shopping"
+                                    style={{ color: '#f5f5f5' }}
+                                ></i>
+                            </button>
+                        )}
                     </div>
+                )}
+
+                {showModal && (
+                    <Modal onClose={toggleModal}>
+                        <PriceForm
+                            onSubmit={onClickHandler}
+                            tokenId={tokenId}
+                            address={address}
+                            onClose={toggleModal}
+                        />
+                    </Modal>
                 )}
             </div>
         </div>
