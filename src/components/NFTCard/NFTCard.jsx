@@ -53,7 +53,7 @@ const NFTCard = ({
                     <div className="p-0 pt-1">
                         <button
                             onClick={() => {
-                                toggleModal();
+                                btnText === 'List' ? toggleModal() : onClickHandler();
                             }}
                             className={`${
                                 btnText === 'Buy' ? 'w-3/4' : 'w-full'
@@ -61,7 +61,7 @@ const NFTCard = ({
                                 btnText === 'Buy' ? 'border-r-2' : ''
                             }`}
                         >
-                            {btnText}
+                            {btnText} NFT
                         </button>
                         {btnText === 'Buy' && (
                             <button className="w-1/4 py-1 bg-blue-700">
@@ -74,7 +74,7 @@ const NFTCard = ({
                     </div>
                 )}
 
-                {showModal && (
+                {showModal && btnText === 'List' && (
                     <Modal onClose={toggleModal}>
                         <PriceForm
                             onSubmit={onClickHandler}

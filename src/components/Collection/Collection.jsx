@@ -48,13 +48,14 @@ const Collection = ({ nftsData, collectionName }) => {
             <hr className="mt-1 mb-4" />
             <div className="flex flex-wrap -mx-4">
                 {Object.values(nftsData).map((nft, index) => (
+                    // TODO: if nft is approved pass the listNft to onClickHandler else pass the approve function
                     <NFTCard
                         key={index}
                         cardImg={nft?.image}
                         cardName={nft.name}
                         cardPrice={nft.cardPrice}
                         lastSoldPrice={nft.lastSoldPrice}
-                        btnText="List NFT"
+                        btnText="List"
                         onClickHandler={listNft}
                         tokenId={nft.tokenId}
                         address={nft.address}
