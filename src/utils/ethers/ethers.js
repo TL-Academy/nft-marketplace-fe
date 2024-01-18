@@ -56,7 +56,6 @@ export const getUserNfts = (userId) => {
             for (const [collectionName, collectionData] of nftCollections) {
                 const abi = await getAbiResult(collectionData.address);
                 const contract = new ethers.Contract(collectionData.address, abi, provider);
-                console.log(contract.filters);
                 const filter = contract.filters[EventTypes.MINTED]();
                 const nfts = await contract.queryFilter(filter, collectionData.fromBlock, 'latest');
 
