@@ -41,6 +41,7 @@ const PriceForm = ({ onSubmit, tokenId, address, onClose }) => {
                 onChange={onChangeHandler}
                 type="number"
                 id="price"
+                placeholder="Enter price in ethereum"
             />
             <button className="bg-blooey text-white py-1 px-16 rounded-md text-2xl font-semibold">
                 List
