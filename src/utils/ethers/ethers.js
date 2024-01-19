@@ -130,11 +130,34 @@ export const getListedNFTs = (userId) => {
             const listed = await contract.queryFilter(filter);
 
             for (const item of listed) {
-                const tokenId = parseInt(item.args.tokenId['_hex']);
-                const user = item.seller;
+                const nft = {};
+
+                const contractAddress = item.args.nftContract;
+
+                let collectionName;
+
+                for (const key in addresses['11155111']['NftCollections']) {
+                    if (addresses['11155111']['NftCollections'].hasOwnProperty(key)) {
+                        const collection = addresses['11155111']['NftCollections'][key];
+                        if (collection['address'] === contractAddress) {
+                            collectionName = key;
+                            break;
+                        }
+                    }
+                }
+
+                nft['tokenId'] = parseInt(item.args.tokenId['_hex']);
+                nft['user'] = item.args.seller;
+                nft['price'] = parseInt(item.args.price['_hex']);
+
+                if (!listedNFTs[collectionName]) {
+                    listedNFTs[collectionName] = [];
+                }
+
+                listedNFTs[collectionName].push(nft);
             }
 
-            // dispatch(setListedNFTs(listedNFTs));
+            dispatch(setListedNFTs(listedNFTs));
         } catch (error) {
             console.error("Error fetching NFT's for the current user", error);
         }

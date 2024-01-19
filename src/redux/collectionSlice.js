@@ -17,11 +17,13 @@ const nftsSlice = createSlice({
             state.mintedNFTs = action.payload;
         },
         addMintedNFT: (state, action) => {
-            const { collectionName, nftData } = action.payload
+            const { collectionName, nftData } = action.payload;
 
-            state.mintedNFTs[collectionName].push(nftData);        
+            state.mintedNFTs[collectionName].push(nftData);
         },
     },
 });
+
+export const getMintedNFTs = (state) => state.nfts.mintedNFTs;
 export const { setMintedNFTs, addMintedNFT } = nftsSlice.actions;
 export default nftsSlice.reducer;

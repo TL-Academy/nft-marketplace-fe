@@ -31,7 +31,7 @@ const NavBar = () => {
                     <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium md:flex-row md:space-x-8 md:mt-0 md:z-auto">
                         <li>
                             <Link
-                                to="/home"
+                                to="/"
                                 className="block py-2 pl-3 pr-4 font-bold text-white rounded md:hover:bg-transparent md:hover:text-gray-400 md:p-0"
                                 aria-current="page"
                             >
