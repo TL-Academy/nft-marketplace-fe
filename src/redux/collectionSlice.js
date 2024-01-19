@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     mintedNFTs: [],
+    listedNFTs: [],
 };
 
 // 1. configurated store => (provider on root level)
@@ -21,9 +22,27 @@ const nftsSlice = createSlice({
 
             state.mintedNFTs[collectionName].push(nftData);
         },
+        filterListedNFTs: (state, action) => {
+            const { nfts, listedNFTs } = action.payload;
+
+            const filteredNFTs = {};
+
+            Object.keys(listedNFTs).forEach((collectionName) => {
+                const mintedNFTs = nfts[collectionName] || [];
+                const _listedNFTs = listedNFTs[collectionName] || [];
+                const filteredMintedNFTs = mintedNFTs.filter((mintedNFT) =>
+                    _listedNFTs.some((listedNFT) => listedNFT.tokenId === mintedNFT.tokenId),
+                );
+
+                filteredNFTs[collectionName] = { ...filteredMintedNFTs };
+            });
+
+            state.listedNFTs = { ...state.listedNFTs, ...filteredNFTs };
+        },
     },
 });
 
 export const getMintedNFTs = (state) => state.nfts.mintedNFTs;
-export const { setMintedNFTs, addMintedNFT } = nftsSlice.actions;
+export const getListed = (state) => state.nfts.listedNFTs;
+export const { setMintedNFTs, addMintedNFT, filterListedNFTs } = nftsSlice.actions;
 export default nftsSlice.reducer;
