@@ -12,6 +12,7 @@ const NFTCard = ({
     onClickHandler,
     tokenId,
     address,
+    listed,
 }) => {
     const [isHovered, setIsHovered] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -53,17 +54,17 @@ const NFTCard = ({
                     <div className="p-0 pt-1">
                         <button
                             onClick={() => {
-                                btnText === 'List' ? toggleModal() : onClickHandler();
+                                listed ? toggleModal() : onClickHandler();
                             }}
                             className={`${
-                                btnText === 'Buy' ? 'w-3/4' : 'w-full'
+                                listed ? 'w-3/4' : 'w-full'
                             } py-1 font-bold text-slate-200 bg-blue-700 ${
-                                btnText === 'Buy' ? 'border-r-2' : ''
+                                listed ? 'border-r-2' : ''
                             }`}
                         >
-                            {btnText} NFT
+                            {listed ? 'Buy' : listed === false ? 'List' : 'Approve'} NFT
                         </button>
-                        {btnText === 'Buy' && (
+                        {listed && (
                             <button className="w-1/4 py-1 bg-blue-700">
                                 <i
                                     className="fa-solid fa-cart-shopping"

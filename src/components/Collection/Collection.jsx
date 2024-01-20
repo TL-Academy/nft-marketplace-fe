@@ -59,6 +59,7 @@ const Collection = ({ nftsData, collectionName }) => {
                         onClickHandler={listNft}
                         tokenId={nft.tokenId}
                         address={nft.address}
+                        listed={nft?.listed}
                     />
                 ))}
             </div>

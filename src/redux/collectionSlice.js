@@ -23,21 +23,26 @@ const nftsSlice = createSlice({
             state.mintedNFTs[collectionName].push(nftData);
         },
         filterListedNFTs: (state, action) => {
-            const { nfts, listedNFTs } = action.payload;
+            const { listedNFTs } = action.payload;
 
-            const filteredNFTs = {};
+            Object.entries(listedNFTs).forEach(([collectionName, collectionListedNFTs]) => {
+                // Iterate through the mintedNFTs array for the specified collection
+                state.mintedNFTs[collectionName].forEach((mintedNFT) => {
+                    // Check if the mintedNFT is present in the listedNFTs array
+                    const listedNFT = collectionListedNFTs.find(
+                        (listed) => listed.tokenId === mintedNFT.tokenId,
+                    );
 
-            Object.keys(listedNFTs).forEach((collectionName) => {
-                const mintedNFTs = nfts[collectionName] || [];
-                const _listedNFTs = listedNFTs[collectionName] || [];
-                const filteredMintedNFTs = mintedNFTs.filter((mintedNFT) =>
-                    _listedNFTs.some((listedNFT) => listedNFT.tokenId === mintedNFT.tokenId),
-                );
-
-                filteredNFTs[collectionName] = { ...filteredMintedNFTs };
+                    // If the mintedNFT is listed, update its 'listed' property
+                    if (listedNFT) {
+                        mintedNFT.listed = true;
+                        mintedNFT.price = listedNFT.price;
+                    } else {
+                        // If not listed, set the 'listed' property to false
+                        mintedNFT.listed = false;
+                    }
+                });
             });
-
-            state.listedNFTs = { ...state.listedNFTs, ...filteredNFTs };
         },
     },
 });

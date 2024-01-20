@@ -34,6 +34,7 @@ export const getAllMintedNFTs = () => {
                         data.address = nft.address;
                         data.owner = nft.args.to;
                         data.tokenId = tokenId;
+                        data.listed = false;
 
                         return data;
                     }),
