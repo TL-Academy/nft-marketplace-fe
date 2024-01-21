@@ -11,8 +11,6 @@ const HomePage = () => {
         ]),
     );
 
-    console.log(filteredNFTs);
-
     return (
         <div>
             {Object.entries(filteredNFTs).map(([collectionName, nftsData]) => (

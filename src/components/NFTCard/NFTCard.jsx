@@ -19,6 +19,7 @@ const NFTCard = ({
 
     const toggleModal = () => {
         setShowModal(!showModal);
+        setIsHovered(false);
     };
 
     return (
@@ -54,7 +55,7 @@ const NFTCard = ({
                     <div className="p-0 pt-1">
                         <button
                             onClick={() => {
-                                listed ? toggleModal() : onClickHandler();
+                                !listed ? toggleModal() : null;
                             }}
                             className={`${
                                 listed ? 'w-3/4' : 'w-full'
