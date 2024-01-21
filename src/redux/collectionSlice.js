@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     mintedNFTs: [],
-    listedNFTs: [],
 };
 
 // 1. configurated store => (provider on root level)

@@ -2,11 +2,13 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserNfts } from '../../utils/ethers/ethers';
 import Collection from '../Collection/Collection';
+import { profileCollections } from '../../redux/profileNfts';
+import { userWalletAddress } from '../../redux/walletReducer';
 
 const Profile = () => {
     const dispatch = useDispatch();
-    const userId = useSelector((state) => state.wallet.walletAddress);
-    const userCollections = useSelector((state) => state.userNfts.userNfts);
+    const userId = useSelector(userWalletAddress);
+    const userCollections = useSelector(profileCollections);
 
     useEffect(() => {
         if (userId) {
