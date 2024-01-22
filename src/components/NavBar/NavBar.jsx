@@ -3,17 +3,12 @@ import classes from './NavBar.module.css';
 import { Link } from 'react-router-dom';
 import ConnectMetamask from '../ConnectMetamask';
 import DarkMode from '../ThemeSwitcher/ThemeSwitcher';
+import handleWalletAddress from '../../utils/getWalletAddress';
 
 const NavBar = () => {
     const [isMenuOpen, setMenuOpen] = useState(false);
 
     const { isConnecting, wallet, connectMetamask, disconnectMetamask } = ConnectMetamask();
-
-    const handleWalletAddress = () => {
-        const walletAddress = wallet.accounts[0].address;
-        const shortWalletAddress = `${walletAddress.substring(0, 6)}...${walletAddress.slice(-4)}`;
-        return shortWalletAddress;
-    };
 
     return (
         <nav className="bg-blooey transition-all duration-300 w-full top-0 left-0 border-b border-black dark:border-d-secondary dark:bg-d-primary">
@@ -36,7 +31,7 @@ const NavBar = () => {
                     <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium md:flex-row md:space-x-8 md:mt-0 md:z-auto">
                         <li>
                             <Link
-                                to="/home"
+                                to="/"
                                 className="block py-2 pl-3 pr-4 font-bold text-white rounded md:hover:bg-transparent md:hover:text-gray-400 md:p-0"
                                 aria-current="page"
                             >
@@ -73,7 +68,7 @@ const NavBar = () => {
                                     {isConnecting
                                         ? 'Connecting...'
                                         : wallet
-                                          ? `${handleWalletAddress()}`
+                                          ? `${handleWalletAddress(wallet)}`
                                           : 'Login'}
                                 </button>
                             ) : (
@@ -102,7 +97,11 @@ const NavBar = () => {
                             }}
                             className={`text-black bg-white dark:text-white dark:bg-d-secondary font-medium rounded-lg text-sm px-4 py-[10px] text-center ${classes.loginResponsive}`}
                         >
-                            {isConnecting ? '...' : wallet ? `${handleWalletAddress()}` : 'Login'}
+                            {isConnecting
+                                ? '...'
+                                : wallet
+                                  ? `${handleWalletAddress(wallet)}`
+                                  : 'Login'}
                         </button>
                     ) : (
                         ''

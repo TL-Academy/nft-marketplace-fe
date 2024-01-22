@@ -4,7 +4,7 @@ import pinJsonToIpfs from '../../services/pinJsontoIPFS';
 import pinFileToIpfs from '../../services/pinFileToIpfs';
 import { useDispatch } from 'react-redux';
 import { addNotification } from '../../redux/notification';
-import { mint } from '../../utils/mintNFT';
+import { mint } from '../../services/mintNFT';
 import addresses from '../../contracts/addresses.json';
 import isFormValid from '../../validators/mintFormValidators';
 import { useSelector } from 'react-redux';

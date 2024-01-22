@@ -1,6 +1,7 @@
+import listNft from '../../services/listNft.js';
 import NFTCard from '../NFTCard/NFTCard';
 import classes from './Collection.module.css';
-import Title from './Title.jsx'
+import Title from './Title.jsx';
 import { dummyData } from './dummyData.js';
 
 // @audit- map data ["title1", "title2", "title3", "title4", "title5]
@@ -23,9 +24,10 @@ const Collection = ({ nftsData, collectionName }) => {
                         </div>
                     </div>
                     <div
-                        className={`ml-auto justify-end space-x-8 sm:text-lg ${classes.responsiveDesktop}`}>
+                        className={`ml-auto justify-end space-x-8 sm:text-lg ${classes.responsiveDesktop}`}
+                    >
                         {Object.values(dummyData).map((data, index) => (
-                            <Title key={index} text={data.text} data={data.content}/>
+                            <Title key={index} text={data.text} data={data.content} />
                         ))}
                     </div>
                     <hr className="mt-3" />
@@ -46,12 +48,18 @@ const Collection = ({ nftsData, collectionName }) => {
             <hr className="mt-1 mb-4" />
             <div className="flex flex-wrap -mx-4">
                 {Object.values(nftsData).map((nft, index) => (
+                    // TODO: if nft is approved pass the listNft to onClickHandler else pass the approve function
                     <NFTCard
                         key={index}
                         cardImg={nft?.image}
                         cardName={nft.name}
                         cardPrice={nft.cardPrice}
                         lastSoldPrice={nft.lastSoldPrice}
+                        btnText="List"
+                        onClickHandler={listNft}
+                        tokenId={nft.tokenId}
+                        address={nft.address}
+                        listed={nft?.listed}
                     />
                 ))}
             </div>

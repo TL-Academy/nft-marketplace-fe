@@ -1,22 +1,27 @@
-import { getAllMintedNFTs } from "../../../utils/ethers/ethers"
-import { useSelector } from "react-redux"
-import { store } from "../../../redux/store"
-import Collection from "../Collection"
-import { useEffect } from "react"
+import { getAllMintedNFTs } from '../../../utils/ethers/ethers';
+import { store } from '../../../redux/store';
+import Collection from '../Collection';
+import { useEffect } from 'react';
+import useNFTData from '../../../hooks/useNFTData';
 
 const Collections = () => {
+    const { nfts } = useNFTData();
+
     useEffect(() => {
         store.dispatch(getAllMintedNFTs());
-    },[])
-    const collections = useSelector((state) => state.nfts.mintedNFTs)
+    }, []);
 
     return (
         <div>
-            {Object.entries(collections).map(([collectionName, nftsData]) => (
-                <Collection key={collectionName} collectionName={collectionName} nftsData={nftsData}/>
+            {Object.entries(nfts).map(([collectionName, nftsData]) => (
+                <Collection
+                    key={collectionName}
+                    collectionName={collectionName}
+                    nftsData={nftsData}
+                />
             ))}
         </div>
-    )
-}
+    );
+};
 
 export default Collections;

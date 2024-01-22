@@ -1,9 +1,7 @@
 import { ethers } from 'ethers';
-import getAbi from './getAbi';
+import getAbi from '../utils/getAbi';
 
 export const mint = async (tokenHash, contractAddr) => {
-    // @audit - browserProvider(window.ethereum)
-
     const provider = new ethers.providers.Web3Provider(window?.ethereum);
     const abi = await getAbi(contractAddr);
 

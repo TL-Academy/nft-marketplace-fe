@@ -8,6 +8,7 @@ import useTheme from './hooks/useTheme.js';
 import Notifications from './components/Notification/Notfications.jsx';
 import Profile from './components/Profile/Profile.jsx';
 import Collections from './components/Collection/Collections/Collections.jsx';
+import HomePage from './components/HomePage/HomePage.jsx';
 
 function App() {
     const { isDark } = useTheme();
@@ -17,10 +18,10 @@ function App() {
             <main className="mx-auto w-full max-w-[2560px] transition-all duration-300 px-4 sm:px-8 xxl:px-16 dark:bg-d-primary">
                 <Notifications />
                 <Routes>
+                    <Route path="/" element={<HomePage />} />
                     <Route path="/create" element={<MintForm />} />
                     <Route path="/card-info" element={<NFTCard />} />
                     <Route path="/collections" element={<Collections />} />
-                    <Route path="/home" element={<Collections />} />
                     <Route path="/profile" element={<Profile />} />
                 </Routes>
             </main>
