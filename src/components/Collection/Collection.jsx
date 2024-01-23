@@ -1,6 +1,10 @@
+import listNft from '../../services/listNft.js';
 import NFTCard from '../NFTCard/NFTCard';
 import classes from './Collection.module.css';
+import Title from './Title.jsx';
+import { dummyData } from './dummyData.js';
 
+// @audit- map data ["title1", "title2", "title3", "title4", "title5]
 const Collection = ({ nftsData, collectionName }) => {
     return (
         <div className="flex flex-col h-full bg-white dark:bg-d-primary transition-all duration-300">
@@ -22,36 +26,9 @@ const Collection = ({ nftsData, collectionName }) => {
                     <div
                         className={`ml-auto justify-end space-x-8 sm:text-lg ${classes.responsiveDesktop}`}
                     >
-                        <div className="flex flex-col">
-                            <span className="font-bold text-base dark:text-white">---- ETH</span>
-                            <span className="text-slate-600 text-base font-semibold dark:text-white">
-                                Total volume
-                            </span>
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="font-bold text-base dark:text-white">---- ETH</span>
-                            <span className="text-slate-600 text-base font-semibold dark:text-white">
-                                Floor price
-                            </span>
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="font-bold text-base dark:text-white">---- WETH</span>
-                            <span className="text-slate-600 text-base font-semibold dark:text-white">
-                                Best offer
-                            </span>
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="font-bold text-base dark:text-white">-%</span>
-                            <span className="text-slate-600 text-base font-semibold dark:text-white">
-                                Listed
-                            </span>
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="font-bold text-base dark:text-white">----</span>
-                            <span className="text-slate-600 text-base font-semibold dark:text-white">
-                                Owners
-                            </span>
-                        </div>
+                        {Object.values(dummyData).map((data, index) => (
+                            <Title key={index} text={data.text} data={data.content} />
+                        ))}
                     </div>
                     <hr className="mt-3" />
                 </div>
@@ -70,19 +47,20 @@ const Collection = ({ nftsData, collectionName }) => {
             </div>
             <hr className="mt-1 mb-4" />
             <div className="flex flex-wrap -mx-4">
-            {Object.values(nftsData).map((nft, index) => (
-    <NFTCard
-        key={index}
-        cardImg={nft.image} 
-        cardName={nft.name}  
-        cardPrice={nft.cardPrice}  
-        lastSoldPrice={nft.lastSoldPrice}
-        owner={nft.owner}
-        contractAddress={nft.address}
-        cardId={0} // card id should be added to redux
-    />
-))}
-
+                {Object.values(nftsData).map((nft, index) => (
+                    // TODO: if nft is approved pass the listNft to onClickHandler else pass the approve function
+                    <NFTCard
+                        key={index}
+                        cardImg={nft?.image}
+                        cardName={nft.name}
+                        cardPrice={nft.cardPrice}
+                        lastSoldPrice={nft.lastSoldPrice}
+                        onClickHandler={listNft}
+                        tokenId={nft.tokenId}
+                        address={nft.address}
+                        listed={nft?.listed}
+                    />
+                ))}
             </div>
         </div>
     );

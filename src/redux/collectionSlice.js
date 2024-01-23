@@ -17,9 +17,36 @@ const nftsSlice = createSlice({
             state.mintedNFTs = action.payload;
         },
         addMintedNFT: (state, action) => {
-            state.mintedNFTs.push(action.payload);
+            const { collectionName, nftData } = action.payload;
+
+            state.mintedNFTs[collectionName].push(nftData);
+        },
+        filterListedNFTs: (state, action) => {
+            const { listedNFTs } = action.payload;
+
+            Object.entries(listedNFTs).forEach(([collectionName, collectionListedNFTs]) => {
+                // Iterate through the mintedNFTs array for the specified collection
+                state.mintedNFTs[collectionName].forEach((mintedNFT) => {
+                    // Check if the mintedNFT is present in the listedNFTs array
+                    const listedNFT = collectionListedNFTs.find(
+                        (listed) => listed.tokenId === mintedNFT.tokenId,
+                    );
+
+                    // If the mintedNFT is listed, update its 'listed' property
+                    if (listedNFT) {
+                        mintedNFT.listed = true;
+                        mintedNFT.price = listedNFT.price;
+                    } else {
+                        // If not listed, set the 'listed' property to false
+                        mintedNFT.listed = false;
+                    }
+                });
+            });
         },
     },
 });
-export const { setMintedNFTs, addMintedNFT } = nftsSlice.actions;
+
+export const getMintedNFTs = (state) => state.nfts.mintedNFTs;
+export const getListed = (state) => state.nfts.listedNFTs;
+export const { setMintedNFTs, addMintedNFT, filterListedNFTs } = nftsSlice.actions;
 export default nftsSlice.reducer;

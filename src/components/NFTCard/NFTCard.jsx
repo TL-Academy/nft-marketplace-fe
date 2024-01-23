@@ -1,22 +1,41 @@
 import { useState } from 'react';
-import { selectAddress } from '../walletReducer';
+import { selectAddress } from '../../redux/walletReducer';
 import { useSelector } from 'react-redux';
 import { useWallets } from "@web3-onboard/react"
 import { ethers } from 'ethers';
 import addresses from '../../contracts/addresses.json';
 
+import priceFormat from '../../utils/priceFormat';
+import Modal from '../Modal/Modal';
+import PriceForm from '../NFTPriceForm/PriceForm';
 
-const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice, owner, contractAddress, cardId }) => {
+const NFTCard = ({
+    cardImg,
+    cardName,
+    cardPrice,
+    lastSoldPrice, owner, contractAddress, cardId,
+    btnText,
+    onClickHandler,
+    tokenId,
+    // address,
+    listed,
+}) => {
     const [isHovered, setIsHovered] = useState(false);
     const [approveButtonText, setApproveButtonText] = useState("Approve")
 
     const address = useSelector(selectAddress);
     const connectedWallets = useWallets();
     const marketplaceAddress = addresses['11155111']['Marketplace']['address']
+    const [showModal, setShowModal] = useState(false);
 
     const priceFormat = (price) => {
         const formatted = Number(price).toFixed(2);
         return `${formatted} ETH`;
+    };
+
+    const toggleModal = () => {
+        setShowModal(!showModal);
+        setIsHovered(false);
     };
 
     function buyButton() {
@@ -71,6 +90,33 @@ const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice, owner, contractA
         )
     }
 
+    function cardButton(){
+        return  (
+            <div className="p-0 pt-1">
+                <button
+                    onClick={() => {
+                        !listed ? toggleModal() : null;
+                    }}
+                    className={`${
+                        listed ? 'w-3/4' : 'w-full'
+                    } py-1 font-bold text-slate-200 bg-blue-700 ${
+                        listed ? 'border-r-2' : ''
+                    }`}
+                >
+                    {listed ? 'Buy' : listed === false ? 'List' : 'Approve'} NFT
+                </button>
+                {listed && (
+                    <button className="w-1/4 py-1 bg-blue-700">
+                        <i
+                            className="fa-solid fa-cart-shopping"
+                            style={{ color: '#f5f5f5' }}
+                        ></i>
+                    </button>
+                )}
+            </div>
+        )
+    }
+
     return (
         <div className="w-1/2 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 2xl:w-1/6 px-2 mb-4">
             <div
@@ -98,8 +144,17 @@ const NFTCard = ({ cardImg, cardName, cardPrice, lastSoldPrice, owner, contractA
                 >
                     Last sale: {priceFormat(lastSoldPrice)}
                 </p>
-                {isHovered && (
-                    address !== owner ? buyButton() : approveButton()
+                {isHovered && cardButton()}
+
+                {showModal && btnText === 'List' && (
+                    <Modal onClose={toggleModal}>
+                        <PriceForm
+                            onSubmit={onClickHandler}
+                            tokenId={tokenId}
+                            address={address}
+                            onClose={toggleModal}
+                        />
+                    </Modal>
                 )}
             </div>
         </div>
