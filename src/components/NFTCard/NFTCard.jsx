@@ -13,17 +13,17 @@ const NFTCard = ({
     cardImg,
     cardName,
     cardPrice,
-    lastSoldPrice, owner, contractAddress, cardId,
+    lastSoldPrice, owner, cardId,
     btnText,
     onClickHandler,
     tokenId,
-    // address,
+    address,
     listed,
 }) => {
     const [isHovered, setIsHovered] = useState(false);
     const [approveButtonText, setApproveButtonText] = useState("Approve")
 
-    const address = useSelector(selectAddress);
+    const walletAddress = useSelector(selectAddress);
     const connectedWallets = useWallets();
     const marketplaceAddress = addresses['11155111']['Marketplace']['address']
     const [showModal, setShowModal] = useState(false);
@@ -55,20 +55,24 @@ const NFTCard = ({
         )
     }
 
+    async function getContract({_address}){
+        const injectedProvider = connectedWallets[0].provider;
+        const provider = new ethers.providers.Web3Provider(injectedProvider);
+        const signer = provider.getSigner();
+        const abi = await fetch(`https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address=${_address}`,)
+            .then((res) => res.json())
+            .then((res) => res.result)
+            .catch((e) => console.error('Error getting the ABI from Etherscan: ', e));
+        return new ethers.Contract(_address, abi, signer);
+    }
+
     function approveButton() {
         return (
             <div className="p-0 pt-1 w-full">
                 <button
                     className="w-full py-1 font-bold text-slate-200 bg-blue-700 border-r-2"
                     onClick={async () => {
-                        const injectedProvider = connectedWallets[0].provider;
-                        const provider = new ethers.providers.Web3Provider(injectedProvider);
-                        const signer = provider.getSigner();
-                        const abi = await fetch(`https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address=${contractAddress}`,)
-                            .then((res) => res.json())
-                            .then((res) => res.result)
-                            .catch((e) => console.error('Error getting the ABI from Etherscan: ', e));
-                        const contract = new ethers.Contract(contractAddress, abi, signer);
+                        contract = await getContract(address);
                         try {
                             const approved = await contract.getApproved(i);
                             if (approved === marketplaceAddress) {
@@ -88,6 +92,29 @@ const NFTCard = ({
                 </button>
             </div>
         )
+    }
+    
+    
+    function buyNFT(){
+        return (
+            <div className="p-0 pt-1 w-full">
+                <button
+                    className="w-full py-1 font-bold text-slate-200 bg-blue-700 border-r-2"
+                    onClick={async () => {
+                        contract = await getContract('0x5326a710Bd17DF352bb8e806d855A5cA6b75D61D'); // ToDo: don't hard code marketplace address
+                        try {
+                            await contract.buyItem();
+                        } catch (error) {
+                            console.error("Error approving", error);
+                        }
+                    }
+                    }
+                >
+                    {approveButtonText}
+                </button>
+            </div>
+        )
+        
     }
 
     function cardButton(){

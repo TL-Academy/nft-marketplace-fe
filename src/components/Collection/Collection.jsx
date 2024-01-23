@@ -55,7 +55,7 @@ const Collection = ({ nftsData, collectionName }) => {
                         cardName={nft.name}
                         cardPrice={nft.cardPrice}
                         lastSoldPrice={nft.lastSoldPrice}
-                        onClickHandler={listNft}
+                        // onClickHandler={listNft}
                         tokenId={nft.tokenId}
                         address={nft.address}
                         listed={nft?.listed}
