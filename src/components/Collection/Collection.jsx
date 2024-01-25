@@ -59,6 +59,7 @@ const Collection = ({ nftsData, collectionName }) => {
                         tokenId={nft.tokenId}
                         address={nft.address}
                         listed={nft?.listed}
+                        price={nft?.price}
                     />
                 ))}
             </div>

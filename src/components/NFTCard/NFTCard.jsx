@@ -14,14 +14,16 @@ const NFTCard = ({
     cardName,
     cardPrice,
     lastSoldPrice, owner, cardId,
-    btnText,
+    // btnText,
     onClickHandler,
     tokenId,
     address,
     listed,
+    price
 }) => {
     const [isHovered, setIsHovered] = useState(false);
     const [approveButtonText, setApproveButtonText] = useState("Approve")
+    const [btnText, setBtnText] = useState("List")
 
     const walletAddress = useSelector(selectAddress);
     const connectedWallets = useWallets();
@@ -38,14 +40,31 @@ const NFTCard = ({
         setIsHovered(false);
     };
 
+
+    async function buyNFT() {
+        const contract = await getContract('0x5326a710Bd17DF352bb8e806d855A5cA6b75D61D'); // ToDo: don't hard code marketplace address
+        try {
+            console.log(price)
+            await contract.buyItem(address, cardId, { value: price.toString(), gasLimit: 3000000 });
+        } catch (error) {
+            console.error("Error buying", error);
+        }
+    }
+
     function buyButton() {
         return (
             <div className="p-0 pt-1">
-                <button className="w-3/4 py-1 font-bold text-slate-200 bg-blue-700 border-r-2">
+                <button
+                    className="w-3/4 py-1 font-bold text-slate-200 bg-blue-700 border-r-2"
+                    onClick={buyNFT}
+                >
                     Buy now
                 </button>
 
-                <button className="w-1/4 py-1 bg-blue-700">
+                <button
+                    className="w-1/4 py-1 bg-blue-700"
+                    onClick={buyNFT}
+                >
                     <i
                         className="fa-solid fa-cart-shopping"
                         style={{ color: '#f5f5f5' }}
@@ -55,7 +74,7 @@ const NFTCard = ({
         )
     }
 
-    async function getContract({_address}){
+    async function getContract(_address) {
         const injectedProvider = connectedWallets[0].provider;
         const provider = new ethers.providers.Web3Provider(injectedProvider);
         const signer = provider.getSigner();
@@ -63,7 +82,7 @@ const NFTCard = ({
             .then((res) => res.json())
             .then((res) => res.result)
             .catch((e) => console.error('Error getting the ABI from Etherscan: ', e));
-        return new ethers.Contract(_address, abi, signer);
+        return new ethers.Contract(_address, abi, signer); 
     }
 
     function approveButton() {
@@ -72,9 +91,9 @@ const NFTCard = ({
                 <button
                     className="w-full py-1 font-bold text-slate-200 bg-blue-700 border-r-2"
                     onClick={async () => {
-                        contract = await getContract(address);
+                        const contract = await getContract(address);
                         try {
-                            const approved = await contract.getApproved(i);
+                            const approved = await contract.getApproved(cardId);
                             if (approved === marketplaceAddress) {
                                 setApproveButtonText("Approved")
                             } else {
@@ -88,39 +107,19 @@ const NFTCard = ({
                     }
                     }
                 >
-                    {approveButtonText}
+                    Approve
                 </button>
             </div>
         )
-    }
-    
-    
-    function buyNFT(){
-        return (
-            <div className="p-0 pt-1 w-full">
-                <button
-                    className="w-full py-1 font-bold text-slate-200 bg-blue-700 border-r-2"
-                    onClick={async () => {
-                        contract = await getContract('0x5326a710Bd17DF352bb8e806d855A5cA6b75D61D'); // ToDo: don't hard code marketplace address
-                        try {
-                            await contract.buyItem();
-                        } catch (error) {
-                            console.error("Error approving", error);
-                        }
-                    }
-                    }
-                >
-                    {approveButtonText}
-                </button>
-            </div>
-        )
-        
     }
 
-    function cardButton(){
-        return  (
+
+    function cardButton() {
+        return (
             <div className="p-0 pt-1">
-                <button
+                {/* {approveButton()} */}
+                {buyButton()}
+                {/* <button
                     onClick={() => {
                         !listed ? toggleModal() : null;
                     }}
@@ -139,8 +138,21 @@ const NFTCard = ({
                             style={{ color: '#f5f5f5' }}
                         ></i>
                     </button>
-                )}
+                )} */}
             </div>
+        )
+    }
+
+    function listModal() {
+        return (
+            <Modal onClose={toggleModal}>
+                <PriceForm
+                    onSubmit={onClickHandler}
+                    tokenId={tokenId}
+                    address={address}
+                    onClose={toggleModal}
+                />
+            </Modal>
         )
     }
 
@@ -173,16 +185,7 @@ const NFTCard = ({
                 </p>
                 {isHovered && cardButton()}
 
-                {showModal && btnText === 'List' && (
-                    <Modal onClose={toggleModal}>
-                        <PriceForm
-                            onSubmit={onClickHandler}
-                            tokenId={tokenId}
-                            address={address}
-                            onClose={toggleModal}
-                        />
-                    </Modal>
-                )}
+                {showModal && btnText === 'List' && listModal()}
             </div>
         </div>
     );
