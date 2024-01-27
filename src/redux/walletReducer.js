@@ -24,3 +24,5 @@ const walletReducer = (state = initialState, action) => {
 
 export const userWalletAddress = (state) => state.wallet.walletAddress;
 export default walletReducer;
+
+export const selectAddress = (state) => state.wallet.walletAddress;

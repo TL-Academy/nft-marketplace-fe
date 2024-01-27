@@ -6,6 +6,7 @@ import { setListedNFTs } from '../../redux/getListedNFTS.js';
 import { EventTypes, PROVIDER_ADDRESS } from '../../constants/constants.js';
 import addresses from '../../contracts/addresses.json';
 import getAbiResult from './getAbiResult.js';
+import { setApprovedNFTs } from '../../redux/getApprovedNFTs.js';
 
 export const provider = new ethers.providers.JsonRpcProvider(PROVIDER_ADDRESS);
 
@@ -35,6 +36,7 @@ export const getAllMintedNFTs = () => {
                         data.owner = nft.args.to;
                         data.tokenId = tokenId;
                         data.listed = false;
+                        data.approved = false;
 
                         return data;
                     }),
@@ -119,7 +121,7 @@ export const updateNfts = async (contractAddress, owner, collectionName) => {
     });
 };
 
-export const getListedNFTs = (userId) => {
+export const getListedNFTs = () => {
     return async function (dispatch) {
         try {
             let listedNFTs = {};
@@ -161,6 +163,41 @@ export const getListedNFTs = (userId) => {
             dispatch(setListedNFTs(listedNFTs));
         } catch (error) {
             console.error("Error fetching NFT's for the current user", error);
+        }
+    };
+};
+
+export const getApprovedNFTs = () => {
+    return async function (dispatch) {
+        try {
+            const nftCollections = Object.entries(addresses['11155111']['NftCollections']);
+            const approvedNFTs = {};
+
+            for (const collection of nftCollections) {
+                const collectionName = collection['0'];
+                const abi = await getAbiResult(collection[1].address);
+                const contract = new ethers.Contract(collection[1].address, abi, provider);
+                const filter = contract.filters.Approval();
+                const approved = await contract.queryFilter(filter);
+
+                const uniqueTokenIds = new Set();
+
+                for (const item of approved) {
+                    const tokenId = parseInt(item.args.tokenId['_hex']);
+
+                    // Check if the tokenId is already in the set
+                    if (!uniqueTokenIds.has(tokenId)) {
+                        uniqueTokenIds.add(tokenId);
+
+                        const nft = { tokenId };
+                        approvedNFTs[collectionName] = approvedNFTs[collectionName] || [];
+                        approvedNFTs[collectionName].push(nft);
+                    }
+                }
+            }
+            dispatch(setApprovedNFTs(approvedNFTs));
+        } catch (err) {
+            console.error('Error getting approved nfts', err);
         }
     };
 };

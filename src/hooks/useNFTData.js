@@ -2,30 +2,39 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { selectListedNFTs } from '../redux/getListedNFTS';
-import { getMintedNFTs, filterListedNFTs } from '../redux/collectionSlice';
-import { getListedNFTs, getAllMintedNFTs } from '../utils/ethers/ethers';
+import { getMintedNFTs, filterListedNFTs, setApprovedState } from '../redux/collectionSlice';
+import { getListedNFTs, getAllMintedNFTs, getApprovedNFTs } from '../utils/ethers/ethers';
+import { selectApprovedNFTs } from '../redux/getApprovedNFTs';
 
 const useNFTData = () => {
     const dispatch = useDispatch();
     const nfts = useSelector(getMintedNFTs);
     const listedNFTs = useSelector(selectListedNFTs);
+    const approvedNFTs = useSelector(selectApprovedNFTs);
 
     useEffect(() => {
         const fetchData = async () => {
             await dispatch(getAllMintedNFTs());
             await dispatch(getListedNFTs());
+            await dispatch(getApprovedNFTs());
         };
 
         fetchData();
     }, [dispatch]);
 
     useEffect(() => {
-        if (nfts !== undefined) {
+        if (nfts !== undefined && listedNFTs) {
             dispatch(filterListedNFTs({ listedNFTs }));
         }
     }, [nfts, listedNFTs, dispatch]);
 
-    return { nfts, listedNFTs };
+    useEffect(() => {
+        if (approvedNFTs) {
+            dispatch(setApprovedState({ approvedNFTs }));
+        }
+    }, [approvedNFTs, dispatch]);
+
+    return { nfts, listedNFTs, approvedNFTs };
 };
 
 export default useNFTData;

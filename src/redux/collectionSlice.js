@@ -31,7 +31,6 @@ const nftsSlice = createSlice({
                     const listedNFT = collectionListedNFTs.find(
                         (listed) => listed.tokenId === mintedNFT.tokenId,
                     );
-
                     // If the mintedNFT is listed, update its 'listed' property
                     if (listedNFT) {
                         mintedNFT.listed = true;
@@ -43,10 +42,27 @@ const nftsSlice = createSlice({
                 });
             });
         },
+        setApprovedState: (state, action) => {
+            const { approvedNFTs } = action.payload;
+
+            Object.entries(approvedNFTs).forEach(([collectionName, collectionApprovedNFTs]) => {
+                state.mintedNFTs[collectionName].forEach((nft) => {
+                    const approvedNFT = collectionApprovedNFTs.find(
+                        (approved) => approved.tokenId === nft.tokenId,
+                    );
+                    if (approvedNFT) {
+                        nft.approved = true;
+                    } else {
+                        nft.approved = false;
+                    }
+                });
+            });
+        },
     },
 });
 
 export const getMintedNFTs = (state) => state.nfts.mintedNFTs;
 export const getListed = (state) => state.nfts.listedNFTs;
-export const { setMintedNFTs, addMintedNFT, filterListedNFTs } = nftsSlice.actions;
+export const { setMintedNFTs, addMintedNFT, filterListedNFTs, setApprovedState } =
+    nftsSlice.actions;
 export default nftsSlice.reducer;

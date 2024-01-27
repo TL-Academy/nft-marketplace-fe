@@ -6,8 +6,8 @@ async function listNft(nftToken, contractAddress, price) {
     const marketplaceAddress = contracts[11155111].Marketplace.address;
     try {
         const provider = new ethers.providers.Web3Provider(window?.ethereum);
-        const abi = await getAbi(marketplaceAddress);
         const signer = provider.getSigner();
+        const abi = await getAbi(marketplaceAddress);
         const contract = new ethers.Contract(marketplaceAddress, abi, signer);
 
         const transaction = await contract.listItem(contractAddress, nftToken, price);
