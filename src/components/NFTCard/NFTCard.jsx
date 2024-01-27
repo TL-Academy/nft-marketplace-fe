@@ -66,7 +66,7 @@ const NFTCard = ({
         }
     }
 
-    // if walletAddress == owner and is listed => btn text (& onClick)  = 'cancel listing'
+    // if walletAddress == owner and is listed => btn text (& onClick)  = 'cancel listing / uldate listing'
     async function cancelListing() {
         const contract = await getContract('0x5326a710Bd17DF352bb8e806d855A5cA6b75D61D'); // don't hardcode
         try {
@@ -79,6 +79,20 @@ const NFTCard = ({
         }
     }
     
+    // if walletAddress == owner and is listed => btn text (& onClick)  = 'cancel listing / uldate listing'
+    async function updateListing(){
+        const contract = await getContract('0x5326a710Bd17DF352bb8e806d855A5cA6b75D61D'); // don't hardcode
+        try {
+            // tx notification happening
+            const newPrice = "???" // should be correct price
+            contract.updateListing(address, cardId, newPrice)
+            // tx notification success
+        } catch (error) {
+            // tx notification error
+            console.error("Error delisting", error);
+        }
+    }
+
     // if walletAddress == owner and is approved => btn text (& onClick)  = 'list NFT'
     async function listNFT() {
         const contract = await getContract('0x5326a710Bd17DF352bb8e806d855A5cA6b75D61D'); // don't hardcode
