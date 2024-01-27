@@ -34,7 +34,7 @@ const useNFTData = () => {
         }
     }, [approvedNFTs, dispatch]);
 
-    return { nfts, listedNFTs };
+    return { nfts, listedNFTs, approvedNFTs };
 };
 
 export default useNFTData;
