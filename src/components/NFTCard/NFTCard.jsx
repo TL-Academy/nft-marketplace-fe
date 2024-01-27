@@ -40,17 +40,81 @@ const NFTCard = ({
         setIsHovered(false);
     };
 
+    async function getContract(_address) {
+        const injectedProvider = connectedWallets[0].provider;
+        const provider = new ethers.providers.Web3Provider(injectedProvider);
+        const signer = provider.getSigner();
+        const abi = await fetch(`https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address=${_address}`)
+            .then((res) => res.json())
+            .then((res) => res.result)
+            .catch((e) => console.error('Error getting the ABI from Etherscan: ', e));
+        return new ethers.Contract(_address, abi, signer);
+    }
 
+
+    // if walletAddress != owner and is listed => btn text (& onClick) = 'buy nft'
+    // price should be parsed, currently throws "invalid BigNumber value"
     async function buyNFT() {
-        const contract = await getContract('0x5326a710Bd17DF352bb8e806d855A5cA6b75D61D'); // ToDo: don't hard code marketplace address
+        const contract = await getContract('0x5326a710Bd17DF352bb8e806d855A5cA6b75D61D'); // don't hardcode 
         try {
-            console.log(price)
-            await contract.buyItem(address, cardId, { value: price.toString(), gasLimit: 3000000 });
+            // show notification that tx is happening
+            await contract.buyItem(address, cardId, { value: price, gasLimit: 3000000 });
+            // show notification that tx succesfull
         } catch (error) {
+            // show notification that tx failed
             console.error("Error buying", error);
         }
     }
 
+    // if walletAddress == owner and is listed => btn text (& onClick)  = 'cancel listing'
+    async function cancelListing() {
+        const contract = await getContract('0x5326a710Bd17DF352bb8e806d855A5cA6b75D61D'); // don't hardcode
+        try {
+            // tx notification happening
+            contract.cancelListing(address, cardId,)
+            // tx notification success
+        } catch (error) {
+            // tx notification error
+            console.error("Error delisting", error);
+        }
+    }
+    
+    // if walletAddress == owner and is approved => btn text (& onClick)  = 'list NFT'
+    async function listNFT() {
+        const contract = await getContract('0x5326a710Bd17DF352bb8e806d855A5cA6b75D61D'); // don't hardcode
+        try {
+            // tx notification happening
+            contract.listItem(address, cardId,)
+            // tx notification success
+        } catch (error) {
+            // tx notification error
+            console.error("Error buying", error);
+        }
+    }
+
+    // if walledAddress == owner and is not approved => btn text (& onClick)  = 'approve NFT'
+    async function approveNFT() {
+        const contract = await getContract(address);
+        try {
+            const approved = await contract.getApproved(cardId); // better to check the events for whether it is aproved?
+            if (approved === marketplaceAddress) {
+            } else {
+                // approving notification
+                await contract.approve(marketplaceAddress, cardId)
+                    .then(
+                    // approve succesfull notification
+                    // btn text & onClick: approve -> list;
+                )
+                    // approve error notification
+                    .catch(e => console.log(e))
+            }
+        } catch (error) {
+            // cant get approved
+            console.error("Error approving", error);
+        }
+    }
+
+    // should be one button, text and onClick change depending on condition
     function buyButton() {
         return (
             <div className="p-0 pt-1">
@@ -74,60 +138,16 @@ const NFTCard = ({
         )
     }
 
-    async function getContract(_address) {
-        const injectedProvider = connectedWallets[0].provider;
-        const provider = new ethers.providers.Web3Provider(injectedProvider);
-        const signer = provider.getSigner();
-        const abi = await fetch(`https://api-sepolia.etherscan.io/api?module=contract&action=getabi&address=${_address}`,)
-            .then((res) => res.json())
-            .then((res) => res.result)
-            .catch((e) => console.error('Error getting the ABI from Etherscan: ', e));
-        return new ethers.Contract(_address, abi, signer); 
-    }
-
-    function approveButton() {
+    function chavdarButton() {
         return (
-            <div className="p-0 pt-1 w-full">
+            <>
                 <button
-                    className="w-full py-1 font-bold text-slate-200 bg-blue-700 border-r-2"
-                    onClick={async () => {
-                        const contract = await getContract(address);
-                        try {
-                            const approved = await contract.getApproved(cardId);
-                            if (approved === marketplaceAddress) {
-                                setApproveButtonText("Approved")
-                            } else {
-                                await contract.approve(marketplaceAddress, cardId)
-                                    .then(setApproveButtonText("Approved"))
-                                    .catch(e => console.log(e))
-                            }
-                        } catch (error) {
-                            console.error("Error approving", error);
-                        }
-                    }
-                    }
-                >
-                    Approve
-                </button>
-            </div>
-        )
-    }
-
-
-    function cardButton() {
-        return (
-            <div className="p-0 pt-1">
-                {/* {approveButton()} */}
-                {buyButton()}
-                {/* <button
                     onClick={() => {
                         !listed ? toggleModal() : null;
                     }}
-                    className={`${
-                        listed ? 'w-3/4' : 'w-full'
-                    } py-1 font-bold text-slate-200 bg-blue-700 ${
-                        listed ? 'border-r-2' : ''
-                    }`}
+                    className={`${listed ? 'w-3/4' : 'w-full'
+                        } py-1 font-bold text-slate-200 bg-blue-700 ${listed ? 'border-r-2' : ''
+                        }`}
                 >
                     {listed ? 'Buy' : listed === false ? 'List' : 'Approve'} NFT
                 </button>
@@ -138,8 +158,8 @@ const NFTCard = ({
                             style={{ color: '#f5f5f5' }}
                         ></i>
                     </button>
-                )} */}
-            </div>
+                )}
+            </>
         )
     }
 
@@ -156,13 +176,9 @@ const NFTCard = ({
         )
     }
 
-    return (
-        <div className="w-1/2 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 2xl:w-1/6 px-2 mb-4">
-            <div
-                className="shadow-xl rounded-lg overflow-hidden cursor-pointer dark:bg-d-secondary"
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-            >
+    function cardData() {
+        return (
+            <>
                 <div className="relative">
                     <div className="sm:h-64 h-44 overflow-hidden rounded-lg">
                         <img
@@ -183,6 +199,31 @@ const NFTCard = ({
                 >
                     Last sale: {priceFormat(lastSoldPrice)}
                 </p>
+            </>
+        )
+    }
+
+    
+    function cardButton() {
+        return (
+            <div className="p-0 pt-1">
+                {/* {approveButton()} */}
+                {buyButton()}
+                {/* {chavdarButton()} */}
+            </div>
+        )
+    }
+
+
+    return (
+        <div className="w-1/2 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 2xl:w-1/6 px-2 mb-4">
+            <div
+                className="shadow-xl rounded-lg overflow-hidden cursor-pointer dark:bg-d-secondary"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+            >
+                {cardData()}
+
                 {isHovered && cardButton()}
 
                 {showModal && btnText === 'List' && listModal()}
