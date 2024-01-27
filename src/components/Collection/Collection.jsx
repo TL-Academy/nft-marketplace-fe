@@ -1,17 +1,21 @@
-import listNft from '../../services/listNft.js';
+import getFunction from '../../utils/getFunction.js';
 import NFTCard from '../NFTCard/NFTCard';
 import classes from './Collection.module.css';
 import Title from './Title.jsx';
 import { dummyData } from './dummyData.js';
+import { selectAddress } from '../../redux/walletReducer';
+import { useSelector } from 'react-redux';
 
 // @audit- map data ["title1", "title2", "title3", "title4", "title5]
 const Collection = ({ nftsData, collectionName }) => {
+    const walletAddress = useSelector(selectAddress);
+
     return (
         <div className="flex flex-col h-full bg-white dark:bg-d-primary transition-all duration-300">
             <div className="h-[340px] flex flex-col justify-end">
                 <div className={`flex items-end sm:mb-6`}>
                     <div className={`flex flex-col`}>
-                        <div className="flex mb-4 ">    
+                        <div className="flex mb-4 ">
                             <img
                                 className="h-28 w-28"
                                 src="https://i.seadn.io/gae/Ju9CkWtV-1Okvf45wo8UctR-M9He2PjILP0oOvxE89AyiPPGtrR3gysu1Zgy0hjd2xKIgjJJtWIc0ybj4Vd7wv8t3pxDGHoJBzDB?auto=format&dpr=1&w=256"
@@ -47,21 +51,25 @@ const Collection = ({ nftsData, collectionName }) => {
             </div>
             <hr className="mt-1 mb-4" />
             <div className="flex flex-wrap -mx-4">
-                {Object.values(nftsData).map((nft, index) => (
-                    // TODO: if nft is approved pass the listNft to onClickHandler else pass the approve function
-                    <NFTCard
-                        key={index}
-                        cardImg={nft?.image}
-                        cardName={nft.name}
-                        cardPrice={nft.cardPrice}
-                        lastSoldPrice={nft.lastSoldPrice}
-                        // onClickHandler={listNft}
-                        tokenId={nft.tokenId}
-                        address={nft.address}
-                        listed={nft?.listed}
-                        price={nft?.price}
-                    />
-                ))}
+                {Object.values(nftsData).map((nft, index) => {
+                    const { text, func } = getFunction(nft, walletAddress);
+
+                    return (
+                        <NFTCard
+                            key={index}
+                            cardImg={nft?.image}
+                            cardName={nft.name}
+                            lastSoldPrice={nft.lastSoldPrice}
+                            onClickHandler={func}
+                            tokenId={nft.tokenId}
+                            address={nft.address}
+                            listed={nft.listed}
+                            price={nft?.price}
+                            btnText={text}
+                            approved={nft.approved}
+                        />
+                    );
+                })}
             </div>
         </div>
     );

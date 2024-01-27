@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { addNotification } from '../../redux/notification';
 
 const PriceForm = ({ onSubmit, tokenId, address, onClose }) => {
-    const [price, setPrice] = useState(null);
+    const [price, setPrice] = useState('');
     const [error, setError] = useState(null);
     const inputRef = useRef(null);
 
@@ -21,7 +20,7 @@ const PriceForm = ({ onSubmit, tokenId, address, onClose }) => {
     };
 
     const onChangeHandler = (e) => {
-        setPrice(e.target.value);
+        setPrice(Number(e.target.value));
         setError(null);
     };
 
