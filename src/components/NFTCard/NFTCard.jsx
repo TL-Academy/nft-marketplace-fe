@@ -22,8 +22,7 @@ const NFTCard = ({
     price
 }) => {
     const [isHovered, setIsHovered] = useState(false);
-    const [approveButtonText, setApproveButtonText] = useState("Approve")
-    const [btnText, setBtnText] = useState("List")
+    const [btnText, setBtnText] = useState("")
 
     const walletAddress = useSelector(selectAddress);
     const connectedWallets = useWallets();
@@ -39,6 +38,14 @@ const NFTCard = ({
         setShowModal(!showModal);
         setIsHovered(false);
     };
+
+    
+    const buttons = {
+        'list': ['List NFT', listNFT],
+        'update': [['Update', updateListing], ['Cancel', cancelListing]],
+        'buy': ['Buy NFT', buyNFT],
+        'approve': ['Approve NFT', approveNFT]
+    }
 
     async function getContract(_address) {
         const injectedProvider = connectedWallets[0].provider;
@@ -78,9 +85,9 @@ const NFTCard = ({
             console.error("Error delisting", error);
         }
     }
-    
+
     // if walletAddress == owner and is listed => btn text (& onClick)  = 'cancel listing / uldate listing'
-    async function updateListing(){
+    async function updateListing() {
         const contract = await getContract('0x5326a710Bd17DF352bb8e806d855A5cA6b75D61D'); // don't hardcode
         try {
             // tx notification happening
@@ -133,10 +140,10 @@ const NFTCard = ({
         return (
             <div className="p-0 pt-1">
                 <button
-                    className="w-3/4 py-1 font-bold text-slate-200 bg-blue-700 border-r-2"
+                    className="py-1 font-bold text-slate-200 bg-blue-700 flex"
                     onClick={buyNFT}
                 >
-                    Buy now
+                   Buy now
                 </button>
 
                 <button
@@ -217,7 +224,7 @@ const NFTCard = ({
         )
     }
 
-    
+
     function cardButton() {
         return (
             <div className="p-0 pt-1">
