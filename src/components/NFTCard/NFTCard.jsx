@@ -89,7 +89,7 @@ const NFTCard = ({
             // tx notification success
         } catch (error) {
             // tx notification error
-            console.error("Error delisting", error);
+            console.error("Error updating", error);
         }
     }
 
@@ -102,7 +102,7 @@ const NFTCard = ({
             // tx notification success
         } catch (error) {
             // tx notification error
-            console.error("Error buying", error);
+            console.error("Error listing", error);
         }
     }
 
