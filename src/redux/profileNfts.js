@@ -3,11 +3,22 @@ import { createSlice } from '@reduxjs/toolkit';
 const slice = createSlice({
     name: 'profileNfts',
     initialState: {
-        userNfts: [],
+        userNfts: {},
     },
     reducers: {
         setUserNfts: (state, action) => {
-            state.userNfts = action.payload;
+            const { nfts, user } = action.payload;
+
+            const filteredNFTs = {};
+
+            Object.entries(nfts).forEach(([collection, collectionNFTs]) => {
+                const filteredCollectionNFTs = collectionNFTs.filter(
+                    (nft) => nft.owner.toLowerCase() === user,
+                );
+                filteredNFTs[collection] = filteredCollectionNFTs;
+            });
+            // console.log(filteredNFTs);
+            state.userNfts = filteredNFTs;
         },
     },
 });

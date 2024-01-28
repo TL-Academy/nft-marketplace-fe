@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { ethers } from 'ethers';
 
 const PriceForm = ({ onSubmit, tokenId, address, onClose }) => {
     const [price, setPrice] = useState('');
@@ -11,16 +12,18 @@ const PriceForm = ({ onSubmit, tokenId, address, onClose }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (price <= 0 || isNaN(price)) {
+        const parsedPrice = parseFloat(price);
+        if (isNaN(parsedPrice) || parsedPrice <= 0) {
             setError('Please enter a valid price greater than 0.');
             return;
         }
-        onSubmit(tokenId, address, price);
+        const eth = ethers.utils.parseEther(price);
+        onSubmit(tokenId, address, eth);
         onClose();
     };
 
     const onChangeHandler = (e) => {
-        setPrice(Number(e.target.value));
+        setPrice(e.target.value);
         setError(null);
     };
 
@@ -38,7 +41,7 @@ const PriceForm = ({ onSubmit, tokenId, address, onClose }) => {
                 className="border-2 border-slate-500 rounded-md px-2 py-1 text-2xl [-moz-appearance:_textfield] [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none"
                 value={price}
                 onChange={onChangeHandler}
-                type="number"
+                type="text"
                 id="price"
                 placeholder="Enter price in ethereum"
             />

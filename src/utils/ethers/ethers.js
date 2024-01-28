@@ -7,6 +7,7 @@ import { EventTypes, PROVIDER_ADDRESS } from '../../constants/constants.js';
 import addresses from '../../contracts/addresses.json';
 import getAbiResult from './getAbiResult.js';
 import { setApprovedNFTs } from '../../redux/getApprovedNFTs.js';
+import getCollectionName from '../getCollectionName.js';
 
 export const provider = new ethers.providers.JsonRpcProvider(PROVIDER_ADDRESS);
 
@@ -90,9 +91,8 @@ export const getUserNfts = (userId) => {
 export const updateNfts = async (contractAddress, owner, collectionName) => {
     const abi = await getAbiResult(contractAddress);
     const contract = new ethers.Contract(contractAddress, abi, provider);
-    const filter = contract.filters[EventTypes.MINTED]();
 
-    contract.on(filter, async (from, to, value, event) => {
+    contract.on('Minted', async (from, to, value, event) => {
         let info = {
             from: from,
             to: to,
@@ -121,7 +121,7 @@ export const updateNfts = async (contractAddress, owner, collectionName) => {
     });
 };
 
-export const getListedNFTs = () => {
+export const getListedNFTs = (userId) => {
     return async function (dispatch) {
         try {
             let listedNFTs = {};
@@ -129,6 +129,7 @@ export const getListedNFTs = () => {
 
             const abi = await getAbiResult(marketplace[0][1]);
             const contract = new ethers.Contract(marketplace[0][1], abi, provider);
+
             const filter = contract.filters.ItemListed();
             const listed = await contract.queryFilter(filter);
 
@@ -137,21 +138,11 @@ export const getListedNFTs = () => {
 
                 const contractAddress = item.args.nftContract;
 
-                let collectionName;
-
-                for (const key in addresses['11155111']['NftCollections']) {
-                    if (addresses['11155111']['NftCollections'].hasOwnProperty(key)) {
-                        const collection = addresses['11155111']['NftCollections'][key];
-                        if (collection['address'] === contractAddress) {
-                            collectionName = key;
-                            break;
-                        }
-                    }
-                }
+                const collectionName = getCollectionName(contractAddress);
 
                 nft['tokenId'] = parseInt(item.args.tokenId['_hex']);
                 nft['user'] = item.args.seller;
-                nft['price'] = parseInt(item.args.price['_hex']);
+                nft['price'] = ethers.utils.formatEther(item.args.price);
 
                 if (!listedNFTs[collectionName]) {
                     listedNFTs[collectionName] = [];

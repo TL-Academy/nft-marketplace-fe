@@ -19,7 +19,7 @@ function getFunction(nft, wallet) {
             return { text: 'List', func: listNft };
         }
 
-        if (nft.listed && !nft.approved) {
+        if (!nft.listed && nft.approved) {
             return { text: 'Cancel listing', func: cancelListing };
         }
 

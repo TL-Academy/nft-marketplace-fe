@@ -9,9 +9,11 @@ import Notifications from './components/Notification/Notfications.jsx';
 import Profile from './components/Profile/Profile.jsx';
 import Collections from './components/Collection/Collections/Collections.jsx';
 import HomePage from './components/HomePage/HomePage.jsx';
+import useNFTData from './hooks/useNFTData.js';
 
 function App() {
     const { isDark } = useTheme();
+    useNFTData();
     return (
         <div className={`${isDark ? 'dark' : 'light'}`}>
             <NavBar />

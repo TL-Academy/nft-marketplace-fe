@@ -1,5 +1,6 @@
 import getContract from '../utils/ethers/getContract';
 import addresses from '../contracts/addresses.json';
+import { getApprovedNFTs } from '../utils/ethers/ethers';
 
 export default async function approveNFT(collectionAddress, cardId) {
     const contract = await getContract(collectionAddress);
@@ -18,6 +19,8 @@ export default async function approveNFT(collectionAddress, cardId) {
                 // approve error notification
                 .catch((e) => console.log(e));
         }
+
+        await getApprovedNFTs();
     } catch (error) {
         // cant get approved
         console.error('Error approving', error);
