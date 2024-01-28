@@ -13,6 +13,7 @@ function itemListedListener() {
                 const collection = getCollectionName(nftContract);
 
                 const nft = { collection, tokenId: parseInt(tokenId['_hex']) };
+                console.log(nft);
                 dispatch(addListed(nft));
             });
         }

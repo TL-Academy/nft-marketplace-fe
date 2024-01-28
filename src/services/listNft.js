@@ -12,8 +12,6 @@ async function listNft(nftToken, contractAddress, price) {
 
         const transaction = await contract.listItem(contractAddress, nftToken, price);
         await transaction.wait();
-
-        console.log('NFT listed successfully');
     } catch (err) {
         console.log('Error listing NFT', err);
     }

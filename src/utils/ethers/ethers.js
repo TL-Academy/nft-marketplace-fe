@@ -1,14 +1,14 @@
 import { ethers } from 'ethers';
-import { store } from '../../redux/store.js';
-import { addMintedNFT, setMintedNFTs } from '../../redux/collectionSlice.js';
+import { setMintedNFTs } from '../../redux/collectionSlice.js';
 import { setUserNfts } from '../../redux/profileNfts.js';
 import { setListedNFTs } from '../../redux/getListedNFTS.js';
-import { EventTypes, PROVIDER_ADDRESS } from '../../constants/constants.js';
+import { EventTypes } from '../../constants/constants.js';
 import addresses from '../../contracts/addresses.json';
 import getAbiResult from './getAbiResult.js';
 import { setApprovedNFTs } from '../../redux/getApprovedNFTs.js';
 import getCollectionName from '../getCollectionName.js';
 
+const PROVIDER_ADDRESS = import.meta.env.VITE_RPC_PROVIDER;
 export const provider = new ethers.providers.JsonRpcProvider(PROVIDER_ADDRESS);
 
 export const getAllMintedNFTs = () => {
@@ -86,39 +86,6 @@ export const getUserNfts = (userId) => {
             console.error("Error fetching NFT's for the current user", error);
         }
     };
-};
-
-export const updateNfts = async (contractAddress, owner, collectionName) => {
-    const abi = await getAbiResult(contractAddress);
-    const contract = new ethers.Contract(contractAddress, abi, provider);
-
-    contract.on('Minted', async (from, to, value, event) => {
-        let info = {
-            from: from,
-            to: to,
-            value: value,
-            data: event,
-        };
-        try {
-            const response = await fetch(`https://ipfs.io/ipfs/${info.data}`);
-
-            if (response.ok) {
-                const jsonData = await response.json();
-                jsonData.image = jsonData.image.replace(/^ipfs:\/\//, '');
-                jsonData.address = contractAddress;
-                jsonData.owner = owner;
-                store.dispatch(addMintedNFT({ collectionName, nftData: jsonData }));
-            } else {
-                console.error(
-                    'Failed to fetch data from IPFS:',
-                    response.status,
-                    response.statusText,
-                );
-            }
-        } catch (error) {
-            console.error('Error fetching data from IPFS:', error.message);
-        }
-    });
 };
 
 export const getListedNFTs = (userId) => {
