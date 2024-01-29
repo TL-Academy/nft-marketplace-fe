@@ -28,6 +28,7 @@ const NFTCard = ({
     const button = {
         List: onClickHandler,
         Approve: () => onClickHandler(address, tokenId),
+        Cancel: () => onClickHandler(address, tokenId),
     };
 
     const handleClick = () => {
@@ -88,7 +89,8 @@ const NFTCard = ({
                 </div>
                 <div className="px-3 pt-3">
                     <p className="mb-2 font-bold dark:text-white">{cardName}</p>
-                    <p className="font-bold pb-0 dark:text-white">{priceFormat(price)}</p>
+                    {/* <p className="font-bold pb-0 dark:text-white">{priceFormat(price)}</p> */}
+                    <p className="font-bold pb-0 dark:text-white">{price || 'Not listed'} ETH</p>
                 </div>
                 <p
                     className={`${

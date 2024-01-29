@@ -35,9 +35,6 @@ const nftsSlice = createSlice({
                     if (listedNFT) {
                         mintedNFT.listed = true;
                         mintedNFT.price = listedNFT.price;
-                    } else {
-                        // If not listed, set the 'listed' property to false
-                        mintedNFT.listed = false;
                     }
                 });
             });
@@ -52,17 +49,42 @@ const nftsSlice = createSlice({
                     );
                     if (approvedNFT) {
                         nft.approved = true;
-                    } else {
-                        nft.approved = false;
                     }
                 });
             });
+        },
+        addApproved: (state, action) => {
+            const { tokenId, collection } = action.payload;
+
+            const index = state.mintedNFTs[collection].findIndex((nft) => nft.tokenId === tokenId);
+
+            if (index !== -1) {
+                state.mintedNFTs[collection][index].approved = true;
+            } else {
+                console.warn(`NFT with tokenId ${tokenId} not found in collection ${collection}`);
+            }
+        },
+        addListed: (state, action) => {
+            const { tokenId, collection } = action.payload;
+            const index = state.mintedNFTs[collection].findIndex((nft) => nft.tokenId === tokenId);
+
+            if (index !== -1) {
+                state.mintedNFTs[collection][index].listed = true;
+            } else {
+                console.warn(`NFT with tokenId ${tokenId} not found in collection ${collection}`);
+            }
         },
     },
 });
 
 export const getMintedNFTs = (state) => state.nfts.mintedNFTs;
 export const getListed = (state) => state.nfts.listedNFTs;
-export const { setMintedNFTs, addMintedNFT, filterListedNFTs, setApprovedState } =
-    nftsSlice.actions;
+export const {
+    setMintedNFTs,
+    addMintedNFT,
+    filterListedNFTs,
+    setApprovedState,
+    addApproved,
+    addListed,
+} = nftsSlice.actions;
 export default nftsSlice.reducer;

@@ -1,4 +1,4 @@
-import { ETHERSCAN_API_KEY } from "../../constants/constants";
+const ETHERSCAN_API_KEY = import.meta.env.VITE_ETHERSCAN_API_KEY;
 
 const getAbiResult = async (contractAddress) => {
     return await fetch(
@@ -7,5 +7,5 @@ const getAbiResult = async (contractAddress) => {
         .then((res) => res.json())
         .then((res) => res.result)
         .catch((e) => console.error('Error getting the ABI from Etherscan: ', e));
-}
+};
 export default getAbiResult;
