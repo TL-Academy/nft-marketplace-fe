@@ -65,11 +65,12 @@ const nftsSlice = createSlice({
             }
         },
         addListed: (state, action) => {
-            const { tokenId, collection } = action.payload;
+            const { tokenId, collection, price } = action.payload;
             const index = state.mintedNFTs[collection].findIndex((nft) => nft.tokenId === tokenId);
 
             if (index !== -1) {
                 state.mintedNFTs[collection][index].listed = true;
+                state.mintedNFTs[collection][index].price = price;
             } else {
                 console.warn(`NFT with tokenId ${tokenId} not found in collection ${collection}`);
             }

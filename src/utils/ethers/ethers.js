@@ -8,8 +8,7 @@ import getAbiResult from './getAbiResult.js';
 import { setApprovedNFTs } from '../../redux/getApprovedNFTs.js';
 import getCollectionName from '../getCollectionName.js';
 
-const PROVIDER_ADDRESS = import.meta.env.VITE_RPC_PROVIDER;
-export const provider = new ethers.providers.JsonRpcProvider(PROVIDER_ADDRESS);
+export const provider = new ethers.providers.Web3Provider(window?.ethereum);
 
 export const getAllMintedNFTs = () => {
     return async function (dispatch) {
@@ -26,6 +25,7 @@ export const getAllMintedNFTs = () => {
                 mintedNFTsData[collectionName] = await Promise.all(
                     nfts.map(async (nft) => {
                         const tokenId = parseInt(nft.args[2]['_hex']);
+                        const owner = await contract.ownerOf(tokenId);
                         const res = await fetch(`https://ipfs.io/ipfs/${nft?.args?.tokenHash}`);
                         if (!res) {
                             return;
@@ -34,7 +34,7 @@ export const getAllMintedNFTs = () => {
                         // @audit validate data
                         data.image = data.image.replace(/^ipfs:\/\//, '');
                         data.address = nft.address;
-                        data.owner = nft.args.to;
+                        data.owner = owner;
                         data.tokenId = tokenId;
                         data.listed = false;
                         data.approved = false;

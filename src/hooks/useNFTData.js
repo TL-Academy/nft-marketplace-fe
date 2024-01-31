@@ -24,34 +24,38 @@ const useNFTData = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            await dispatch(getAllMintedNFTs());
-            await dispatch(getListedNFTs());
-            await dispatch(getApprovedNFTs());
-            await dispatch(itemApprovedListener());
-            await dispatch(itemListedListener());
-            await dispatch(itemMintedListener(walletAddress));
+            try {
+                await dispatch(getAllMintedNFTs());
+                await dispatch(getListedNFTs());
+                await dispatch(getApprovedNFTs());
+                await dispatch(itemApprovedListener());
+                await dispatch(itemListedListener());
+                await dispatch(itemMintedListener());
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
         };
 
         fetchData();
-    }, [dispatch]);
+    }, []);
 
     useEffect(() => {
         if (nfts !== undefined && listedNFTs) {
             dispatch(filterListedNFTs({ listedNFTs }));
         }
-    }, [nfts, listedNFTs, dispatch]);
+    }, [nfts, listedNFTs]);
 
     useEffect(() => {
         if (approvedNFTs) {
             dispatch(setApprovedState({ approvedNFTs }));
         }
-    }, [approvedNFTs, dispatch]);
+    }, [approvedNFTs]);
 
     useEffect(() => {
         if (nfts) {
             dispatch(setUserNfts({ nfts, user: walletAddress }));
         }
-    }, [nfts, walletAddress, dispatch]);
+    }, [nfts, walletAddress]);
 
     return { nfts, listedNFTs, approvedNFTs, userNFTs };
 };

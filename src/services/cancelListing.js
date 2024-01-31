@@ -8,7 +8,6 @@ export default async function cancelListing(address, cardId) {
     try {
         // tx notification happening
         contract.cancelListing(address, cardId);
-        contract.on();
         // tx notification success
     } catch (error) {
         // tx notification error

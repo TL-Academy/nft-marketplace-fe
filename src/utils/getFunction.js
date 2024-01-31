@@ -6,6 +6,8 @@ import updateListing from '../services/updateListing';
 
 function getFunction(nft, wallet) {
     const owner = nft.owner.toLowerCase();
+    if (!owner) return;
+
     if (wallet !== owner && nft.listed) {
         return { text: 'Buy', func: buyNFT };
     }

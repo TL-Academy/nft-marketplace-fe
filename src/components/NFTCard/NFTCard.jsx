@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-import priceFormat from '../../utils/priceFormat';
 import Modal from '../Modal/Modal';
 import PriceForm from '../NFTPriceForm/PriceForm';
 
@@ -8,12 +7,12 @@ const NFTCard = ({
     cardImg,
     cardName,
     lastSoldPrice,
-    btnText,
     onClickHandler,
     tokenId,
     address,
     listed,
     price,
+    btnText,
     approved,
 }) => {
     const [isHovered, setIsHovered] = useState(false);
@@ -89,15 +88,16 @@ const NFTCard = ({
                 </div>
                 <div className="px-3 pt-3">
                     <p className="mb-2 font-bold dark:text-white">{cardName}</p>
-                    {/* <p className="font-bold pb-0 dark:text-white">{priceFormat(price)}</p> */}
-                    <p className="font-bold pb-0 dark:text-white">{price || 'Not listed'} ETH</p>
+                    <p className="font-bold pb-0 dark:text-white">
+                        {price ? `${price} ETH` : 'Not listed'}
+                    </p>
                 </div>
                 <p
                     className={`${
                         isHovered ? 'hidden' : 'px-3 pb-3 pt-0'
                     } text-slate-600 dark:text-slate-400`}
                 >
-                    Last sale: {priceFormat(lastSoldPrice)}
+                    Last sale: {lastSoldPrice ? lastSoldPrice : 'Not sold yet'}
                 </p>
             </>
         );
