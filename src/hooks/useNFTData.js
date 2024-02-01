@@ -40,7 +40,7 @@ const useNFTData = () => {
                 await dispatch(itemListedListener());
                 await dispatch(itemMintedListener());
                 await dispatch(ItemBoughtListener());
-                // await dispatch(itemListedCancelListener());
+                await dispatch(itemListedCancelListener());
             } catch (error) {
                 console.error('Error fetching data:', error);
             }

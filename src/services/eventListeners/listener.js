@@ -120,4 +120,10 @@ function itemListedCancelListener() {
     };
 }
 
-export { itemListedListener, itemApprovedListener, itemMintedListener, itemListedCancelListener };
+export {
+    itemListedListener,
+    itemApprovedListener,
+    itemMintedListener,
+    itemListedCancelListener,
+    ItemBoughtListener,
+};
