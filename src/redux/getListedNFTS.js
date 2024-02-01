@@ -15,10 +15,27 @@ const slice = createSlice({
 
             state.listedNFTs[collection].push(nft);
         },
+        removeListedNFT: (state, action) => {
+            const { canceledNFTs } = action.payload;
+
+            Object.entries(canceledNFTs).forEach(([collectionName, collectionCanceledNFTs]) => {
+                state.listedNFTs[collectionName] = state.listedNFTs[collectionName].map((nft) => {
+                    const matchingCanceledNFT = collectionCanceledNFTs.find(
+                        (canceledNFT) => canceledNFT.tokenId === nft.tokenId,
+                    );
+
+                    if (matchingCanceledNFT && matchingCanceledNFT.blockNumber > nft.blockNumber) {
+                        return { ...nft, listed: false };
+                    }
+
+                    return nft;
+                });
+            });
+        },
     },
 });
 
 export const selectListedNFTs = (state) => state.listedNFTs.listedNFTs;
 
-export const { setListedNFTs, addListedNFT } = slice.actions;
+export const { setListedNFTs, addListedNFT, removeListedNFT } = slice.actions;
 export default slice.reducer;

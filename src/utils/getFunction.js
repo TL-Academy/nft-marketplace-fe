@@ -2,7 +2,6 @@ import approveNFT from '../services/approveNFT';
 import buyNFT from '../services/buyNFT';
 import cancelListing from '../services/cancelListing';
 import listNft from '../services/listNft';
-import updateListing from '../services/updateListing';
 
 function getFunction(nft, wallet) {
     const owner = nft.owner.toLowerCase();
@@ -21,12 +20,13 @@ function getFunction(nft, wallet) {
             return { text: 'List', func: listNft };
         }
 
-        if (!nft.listed && nft.approved) {
-            return { text: 'Cancel listing', func: cancelListing };
-        }
-
         if (nft.listed && nft.approved) {
-            return { text: 'Update', func: updateListing };
+            return {
+                text: 'Cancel',
+                func: () => {
+                    console.log('Canceling nft...');
+                },
+            };
         }
     }
     return { text: nft.name, func: buyNFT };

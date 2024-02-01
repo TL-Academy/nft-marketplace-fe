@@ -3,7 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { selectListedNFTs } from '../redux/getListedNFTS';
 import { getMintedNFTs, filterListedNFTs, setApprovedState } from '../redux/collectionSlice';
-import { getListedNFTs, getAllMintedNFTs, getApprovedNFTs } from '../utils/ethers/ethers';
+import {
+    getListedNFTs,
+    getAllMintedNFTs,
+    getApprovedNFTs,
+    getCanceledNFTs,
+} from '../utils/ethers/ethers';
 import { selectApprovedNFTs } from '../redux/getApprovedNFTs';
 import { selectAddress } from '../redux/walletReducer';
 import { setUserNfts, profileCollections } from '../redux/profileNfts';
@@ -11,7 +16,15 @@ import {
     itemApprovedListener,
     itemListedListener,
     itemMintedListener,
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
     ItemBoughtListener
+=======
+    itemListedCancelListener,
+>>>>>>> Stashed changes
+=======
+    itemListedCancelListener,
+>>>>>>> Stashed changes
 } from '../services/eventListeners/listener';
 
 const useNFTData = () => {
@@ -29,10 +42,19 @@ const useNFTData = () => {
                 await dispatch(getAllMintedNFTs());
                 await dispatch(getListedNFTs());
                 await dispatch(getApprovedNFTs());
+                await dispatch(getCanceledNFTs());
                 await dispatch(itemApprovedListener());
                 await dispatch(itemListedListener());
                 await dispatch(itemMintedListener());
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
                 await dispatch(ItemBoughtListener());
+=======
+                // await dispatch(itemListedCancelListener());
+>>>>>>> Stashed changes
+=======
+                // await dispatch(itemListedCancelListener());
+>>>>>>> Stashed changes
             } catch (error) {
                 console.error('Error fetching data:', error);
             }

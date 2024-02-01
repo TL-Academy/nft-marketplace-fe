@@ -29,7 +29,7 @@ const nftsSlice = createSlice({
                 state.mintedNFTs[collectionName].forEach((mintedNFT) => {
                     // Check if the mintedNFT is present in the listedNFTs array
                     const listedNFT = collectionListedNFTs.find(
-                        (listed) => listed.tokenId === mintedNFT.tokenId,
+                        (listed) => listed.tokenId === mintedNFT.tokenId && listed.listed === true,
                     );
                     // If the mintedNFT is listed, update its 'listed' property
                     if (listedNFT) {
@@ -75,6 +75,15 @@ const nftsSlice = createSlice({
                 console.warn(`NFT with tokenId ${tokenId} not found in collection ${collection}`);
             }
         },
+        setListedFalse: (state, action) => {
+            const { collection, tokenId } = action.payload;
+
+            const nft = state.mintedNFTs[collection].find((nft) => nft.tokenId === tokenId);
+
+            if (nft) {
+                nft.listed = false;
+            }
+        },
     },
 });
 
@@ -87,5 +96,6 @@ export const {
     setApprovedState,
     addApproved,
     addListed,
+    setListedFalse,
 } = nftsSlice.actions;
 export default nftsSlice.reducer;

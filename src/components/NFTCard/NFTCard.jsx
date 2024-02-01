@@ -28,7 +28,7 @@ const NFTCard = ({
         List: onClickHandler,
         Approve: () => onClickHandler(address, tokenId),
         Cancel: () => onClickHandler(address, tokenId),
-        Buy: () => onClickHandler(address, tokenId, price)
+        Buy: () => onClickHandler(address, tokenId, price),
     };
 
     const handleClick = () => {
