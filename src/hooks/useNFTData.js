@@ -16,15 +16,8 @@ import {
     itemApprovedListener,
     itemListedListener,
     itemMintedListener,
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    ItemBoughtListener
-=======
+    ItemBoughtListener,
     itemListedCancelListener,
->>>>>>> Stashed changes
-=======
-    itemListedCancelListener,
->>>>>>> Stashed changes
 } from '../services/eventListeners/listener';
 
 const useNFTData = () => {
@@ -46,15 +39,8 @@ const useNFTData = () => {
                 await dispatch(itemApprovedListener());
                 await dispatch(itemListedListener());
                 await dispatch(itemMintedListener());
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
                 await dispatch(ItemBoughtListener());
-=======
                 // await dispatch(itemListedCancelListener());
->>>>>>> Stashed changes
-=======
-                // await dispatch(itemListedCancelListener());
->>>>>>> Stashed changes
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
