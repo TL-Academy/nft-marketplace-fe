@@ -8,9 +8,10 @@ export default async function buyNFT(address, cardId, price) {
     const options = {value: ethers.utils.parseEther(price), gasLimit: 3000000}
     try {
         // show notification that tx is happening
+        console.log(price)
         const tx = await contract.buyItem(address, cardId, options);
         const res = await tx.wait();
-        console.log(res)
+        // console.log(res)
         // show notification that tx succesfull
     } catch (error) {
         // show notification that tx failed

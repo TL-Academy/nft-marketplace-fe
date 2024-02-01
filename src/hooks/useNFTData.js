@@ -11,6 +11,7 @@ import {
     itemApprovedListener,
     itemListedListener,
     itemMintedListener,
+    ItemBoughtListener
 } from '../services/eventListeners/listener';
 
 const useNFTData = () => {
@@ -31,6 +32,7 @@ const useNFTData = () => {
                 await dispatch(itemApprovedListener());
                 await dispatch(itemListedListener());
                 await dispatch(itemMintedListener());
+                await dispatch(ItemBoughtListener());
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
