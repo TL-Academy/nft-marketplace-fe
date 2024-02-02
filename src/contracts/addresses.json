@@ -1,16 +1,20 @@
 {
     "11155111": {
         "Marketplace": {
-            "address": "0x5326a710Bd17DF352bb8e806d855A5cA6b75D61D"
+            "address": "0x90b570e002E927B5b91e3986f1E46548e7A8E210"
         },
         "NftCollections": {
-            "ChavdarNft": {
-                "address": "0x29bF7713DB0E798aA2f7D4B2A11ad8e5D11ac966",
-                "fromBlock": 4912886
+            "BoringToken": {
+                "address": "0x08825b300c86b7d8415ba2189c0a56a73fd16165",
+                "fromBlock": 5206009
             },
-            "BoringTokenNFTDarin": {
-                "address": "0x1279e68AE1e45eE675f532027A850F9Ea27c8147",
-                "fromBlock": 4910733
+            "NiftyNebula": {
+                "address": "0x40Dd3F4551FA6cE71Fa96E21843CF86FE621E7ee",
+                "fromBlock": 5206025
+            },
+            "PixelPulse": {
+                "address": "0xdd68eb4e1c53b8691ddd0631a59d8788a5fd1bc8",
+                "fromBlock": 5206018
             }
         }
     }
