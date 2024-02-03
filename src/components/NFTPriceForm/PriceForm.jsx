@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { ethers } from 'ethers';
+import { addNotification } from '../../redux/notification';
 
 const PriceForm = ({ onSubmit, tokenId, address, onClose }) => {
-    const [price, setPrice] = useState('');
+    const [price, setPrice] = useState(null);
     const [error, setError] = useState(null);
     const inputRef = useRef(null);
 
@@ -12,14 +13,28 @@ const PriceForm = ({ onSubmit, tokenId, address, onClose }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const parsedPrice = parseFloat(price);
-        if (isNaN(parsedPrice) || parsedPrice <= 0) {
+        if (price <= 0 || isNaN(price)) {
             setError('Please enter a valid price greater than 0.');
             return;
         }
-        const eth = ethers.utils.parseEther(price);
-        onSubmit(tokenId, address, eth);
-        onClose();
+        addNotification({
+            message: 'Listing in progress',
+            status: 'in-progress'
+        });
+
+        try {
+            onSubmit(tokenId, address, price);
+            onClose();
+            addNotification({
+                message: 'Listing successful',
+                status: 'success'
+            });
+        } catch (error) {
+            addNotification({
+                message: 'Error in listing',
+                status: 'error'
+            });
+        }
     };
 
     const onChangeHandler = (e) => {
@@ -41,9 +56,8 @@ const PriceForm = ({ onSubmit, tokenId, address, onClose }) => {
                 className="border-2 border-slate-500 rounded-md px-2 py-1 text-2xl [-moz-appearance:_textfield] [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none"
                 value={price}
                 onChange={onChangeHandler}
-                type="text"
+                type="number"
                 id="price"
-                placeholder="Enter price in ethereum"
             />
             <button className="bg-blooey text-white py-1 px-16 rounded-md text-2xl font-semibold">
                 List
