@@ -14,6 +14,7 @@ import useNFTData from './hooks/useNFTData.js';
 function App() {
     const { isDark } = useTheme();
     useNFTData();
+
     return (
         <div className={`${isDark ? 'dark' : 'light'}`}>
             <NavBar />

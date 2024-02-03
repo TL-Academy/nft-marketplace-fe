@@ -3,7 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { selectListedNFTs } from '../redux/getListedNFTS';
 import { getMintedNFTs, filterListedNFTs, setApprovedState } from '../redux/collectionSlice';
-import { getListedNFTs, getAllMintedNFTs, getApprovedNFTs } from '../utils/ethers/ethers';
+import {
+    getListedNFTs,
+    getAllMintedNFTs,
+    getApprovedNFTs,
+    getCanceledNFTs,
+} from '../utils/ethers/ethers';
 import { selectApprovedNFTs } from '../redux/getApprovedNFTs';
 import { selectAddress } from '../redux/walletReducer';
 import { setUserNfts, profileCollections } from '../redux/profileNfts';
@@ -11,6 +16,8 @@ import {
     itemApprovedListener,
     itemListedListener,
     itemMintedListener,
+    ItemBoughtListener,
+    itemListedCancelListener,
 } from '../services/eventListeners/listener';
 
 const useNFTData = () => {
@@ -24,34 +31,41 @@ const useNFTData = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            await dispatch(getAllMintedNFTs());
-            await dispatch(getListedNFTs());
-            await dispatch(getApprovedNFTs());
-            await dispatch(itemApprovedListener());
-            await dispatch(itemListedListener());
-            await dispatch(itemMintedListener(walletAddress));
+            try {
+                await dispatch(getAllMintedNFTs());
+                await dispatch(getListedNFTs());
+                await dispatch(getApprovedNFTs());
+                await dispatch(getCanceledNFTs());
+                await dispatch(itemApprovedListener());
+                await dispatch(itemListedListener());
+                await dispatch(itemMintedListener());
+                await dispatch(ItemBoughtListener());
+                await dispatch(itemListedCancelListener());
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
         };
 
         fetchData();
-    }, [dispatch]);
+    }, []);
 
     useEffect(() => {
         if (nfts !== undefined && listedNFTs) {
             dispatch(filterListedNFTs({ listedNFTs }));
         }
-    }, [nfts, listedNFTs, dispatch]);
+    }, [nfts, listedNFTs]);
 
     useEffect(() => {
         if (approvedNFTs) {
             dispatch(setApprovedState({ approvedNFTs }));
         }
-    }, [approvedNFTs, dispatch]);
+    }, [approvedNFTs]);
 
     useEffect(() => {
         if (nfts) {
             dispatch(setUserNfts({ nfts, user: walletAddress }));
         }
-    }, [nfts, walletAddress, dispatch]);
+    }, [nfts, walletAddress]);
 
     return { nfts, listedNFTs, approvedNFTs, userNFTs };
 };

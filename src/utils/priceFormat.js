@@ -1,6 +1,7 @@
+import { ethers } from 'ethers';
+
 const priceFormat = (price) => {
-    const formatted = Number(price).toFixed(2);
-    return `${formatted} ETH`;
+    return ethers.utils.formatEther(price);
 };
 
 export default priceFormat;

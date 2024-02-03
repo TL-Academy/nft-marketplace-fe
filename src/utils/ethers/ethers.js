@@ -1,15 +1,15 @@
 import { ethers } from 'ethers';
 import { setMintedNFTs } from '../../redux/collectionSlice.js';
 import { setUserNfts } from '../../redux/profileNfts.js';
-import { setListedNFTs } from '../../redux/getListedNFTS.js';
+import { removeListedNFT, setListedNFTs } from '../../redux/getListedNFTS.js';
 import { EventTypes } from '../../constants/constants.js';
 import addresses from '../../contracts/addresses.json';
 import getAbiResult from './getAbiResult.js';
 import { setApprovedNFTs } from '../../redux/getApprovedNFTs.js';
 import getCollectionName from '../getCollectionName.js';
+import getContract from './getContract.js';
 
-const PROVIDER_ADDRESS = import.meta.env.VITE_RPC_PROVIDER;
-export const provider = new ethers.providers.JsonRpcProvider(PROVIDER_ADDRESS);
+export const provider = new ethers.providers.Web3Provider(window?.ethereum);
 
 export const getAllMintedNFTs = () => {
     return async function (dispatch) {
@@ -26,6 +26,7 @@ export const getAllMintedNFTs = () => {
                 mintedNFTsData[collectionName] = await Promise.all(
                     nfts.map(async (nft) => {
                         const tokenId = parseInt(nft.args[2]['_hex']);
+                        const owner = await contract.ownerOf(tokenId);
                         const res = await fetch(`https://ipfs.io/ipfs/${nft?.args?.tokenHash}`);
                         if (!res) {
                             return;
@@ -34,7 +35,7 @@ export const getAllMintedNFTs = () => {
                         // @audit validate data
                         data.image = data.image.replace(/^ipfs:\/\//, '');
                         data.address = nft.address;
-                        data.owner = nft.args.to;
+                        data.owner = owner;
                         data.tokenId = tokenId;
                         data.listed = false;
                         data.approved = false;
@@ -110,6 +111,8 @@ export const getListedNFTs = (userId) => {
                 nft['tokenId'] = parseInt(item.args.tokenId['_hex']);
                 nft['user'] = item.args.seller;
                 nft['price'] = ethers.utils.formatEther(item.args.price);
+                nft['listed'] = true;
+                nft['blockNumber'] = Number(item.blockNumber);
 
                 if (!listedNFTs[collectionName]) {
                     listedNFTs[collectionName] = [];
@@ -156,6 +159,42 @@ export const getApprovedNFTs = () => {
             dispatch(setApprovedNFTs(approvedNFTs));
         } catch (err) {
             console.error('Error getting approved nfts', err);
+        }
+    };
+};
+
+export const getCanceledNFTs = () => {
+    return async function (dispatch) {
+        try {
+            const canceledNFTs = {};
+
+            const marketplace = addresses['11155111']['Marketplace'].address;
+            const contract = await getContract(marketplace);
+
+            const filter = contract.filters.ListingCanceled();
+            const canceled = await contract.queryFilter(filter);
+
+            for (const item of canceled) {
+                const nft = {};
+
+                const contractAddress = item.args.nftContract;
+
+                const collectionName = getCollectionName(contractAddress);
+
+                nft['tokenId'] = parseInt(item.args.tokenId['_hex']);
+                nft['user'] = item.args.seller;
+                nft['blockNumber'] = Number(item.blockNumber);
+
+                if (!canceledNFTs[collectionName]) {
+                    canceledNFTs[collectionName] = [];
+                }
+
+                canceledNFTs[collectionName].push(nft);
+            }
+
+            dispatch(removeListedNFT({ canceledNFTs }));
+        } catch (error) {
+            console.error('Error getting canceled nfts', error);
         }
     };
 };
