@@ -14,13 +14,17 @@ const HomePage = () => {
 
     return (
         <div>
-            {Object.entries(filteredNFTs).map(([collectionName, nftsData]) => (
-                <Collection
-                    key={collectionName}
-                    collectionName={collectionName}
-                    nftsData={nftsData}
-                />
-            ))}
+            {Object.entries(filteredNFTs).map(([collectionName, nftsData]) => {
+                return (
+                    nftsData.length > 0 && (
+                        <Collection
+                            key={collectionName}
+                            collectionName={collectionName}
+                            nftsData={nftsData}
+                        />
+                    )
+                );
+            })}
         </div>
     );
 };
