@@ -5,6 +5,8 @@ import ConnectMetamask from '../ConnectMetamask';
 import DarkMode from '../ThemeSwitcher/ThemeSwitcher';
 import handleWalletAddress from '../../utils/getWalletAddress';
 
+import logo from '../../assets/nft-logo.png';
+
 const NavBar = () => {
     const [isMenuOpen, setMenuOpen] = useState(false);
 
@@ -17,7 +19,7 @@ const NavBar = () => {
                     <span
                         className={`font-semibold text-2xl text-white inline-block ${classes.logoResponsive}`}
                     >
-                        NFT Academy
+                        <img className="h-10 rounded-full" src={logo} alt="" />
                     </span>
                 </Link>
                 <div
